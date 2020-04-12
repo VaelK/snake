@@ -26,5 +26,59 @@ MINUTES
 @enduml
 
 @startuml
+GameParameters -- GameLogic
+GameParameters -- GameWidget
+GameParameters -- BoardWidget
+GameParameters -- Actor
+GameParameters -- ActorWidget
 
+class GameParameters << (S,#FF7700) Singleton >> {
+    + int boardWidth
+    + int boardHeight
+    + int actionPerMinutes
+    + actor currentActor
+}
+class BoardWidget {
+    - void initBoard()
+    - void refresh()
+    - void pauseScreen()
+}
+class GameLogic {
+    + int score
+
+    - bool gameEnd()
+    - void scoreUpdate()
+    - array computNextState()
+    - void pause()
+    - void stop()
+    - void startResume()
+}
+class GameWidget {
+    - void scoreUpdate()
+    - void actorUpdate()
+}
+class StatWidget {
+    - void updateView()
+    - void loadView()
+    - void backToGame()
+}
+class Stats {
+    - void loadData()
+    - void updateBestScore()
+}
+class ActorWidget {
+    + Actor listActors[]
+    - loadActors()
+    - populateListActor()
+    - refreshListParam()
+}
+abstract Actor {
+    - map params
+    - String name
+    + map getParams()
+    + void setParams()
+    - void train()
+    - void perform()
+    - void saveActor()
+}
 @enduml

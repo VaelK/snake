@@ -1,12 +1,15 @@
 @startuml
 gameWidget -> gameLogic : start/resume
+gameWidget -> boardWidget : start/resume
 loop while no stop or pause or endGame
 gameLogic -> boardWidget : boardState
 actor -> gameLogic : dirCmd
 end
 gameLogic -> gameLogic : endGame
 gameWidget -> gameLogic :pause
+gameWidget -> boardWidget :pause
 gameWidget -> gameLogic :stop
+gameWidget -> boardWidget :stop
 gameLogic -> gameWidget :scoreIncr
 @enduml
 
@@ -20,9 +23,11 @@ statWidget -> gameWidget : leaveStats
 @startuml
 gameWidget -> actor :startTrain
 actor -> gameLogic :pause
+actor -> boardWidget :pause
 gameWidget -> actor :stopTrain
 actor -> gameWidget :finishTraining
 actor -> gameLogic : start/resume
+actor -> boardWidget : start/resume
 @enduml
 
 @startuml
