@@ -14,6 +14,7 @@ class GameWidget : public QWidget
 public:
     explicit GameWidget(QWidget *parent = nullptr);
     ~GameWidget();
+    void paintEvent(QPaintEvent *e);
 
 private:
     Ui::GameWidget *ui;
