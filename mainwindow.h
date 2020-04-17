@@ -14,6 +14,11 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
+public slots:
+    void toGameWidget();
+    void toSelectActorWidget();
+    void toStatsWidget();
+
 private:
     Ui::MainWindow *ui;
 };
