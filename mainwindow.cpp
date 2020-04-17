@@ -19,9 +19,17 @@ MainWindow::MainWindow(QWidget *parent)
     ui->stackedWidget->addWidget(statWidget);
     ui->stackedWidget->addWidget(selectActorWidget);
     ui->stackedWidget->setCurrentWidget(gameWidget);
+    //Connecting widgets together with button
+    // Game and actor selection widgets
     QObject::connect(gameWidget->findChild<QPushButton *>("selectActorButt"),
                      QPushButton::pressed,
                      this, MainWindow::toSelectActorWidget);
+
+    // Game and stats widget
+    QObject::connect(gameWidget->findChild<QPushButton *>("statsButt"),
+                     QPushButton::pressed,
+                     this, MainWindow::toStatsWidget);
+
 }
 
 MainWindow::~MainWindow()
