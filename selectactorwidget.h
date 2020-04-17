@@ -2,6 +2,7 @@
 #define SELECTACTORWIDGET_H
 
 #include <QWidget>
+#include <QMainWindow>
 
 namespace Ui {
 class SelectActorWidget;
@@ -14,6 +15,10 @@ class SelectActorWidget : public QWidget
 public:
     explicit SelectActorWidget(QWidget *parent = nullptr);
     ~SelectActorWidget();
+    QWidget *parent;
+
+public slots:
+    void validateNewActor();
 
 private:
     Ui::SelectActorWidget *ui;

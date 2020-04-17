@@ -12,7 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
     // Stacking the different windows
     GameWidget *gameWidget = new GameWidget();
     StatWidget *statWidget = new StatWidget();
-    SelectActorWidget *selectActorWidget = new SelectActorWidget();
+    SelectActorWidget *selectActorWidget = new SelectActorWidget(this);
     ui->stackedWidget->removeWidget(ui->stackedWidget->currentWidget());
     ui->stackedWidget->removeWidget(ui->stackedWidget->currentWidget());
     ui->stackedWidget->addWidget(gameWidget);
@@ -24,7 +24,6 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(gameWidget->findChild<QPushButton *>("selectActorButt"),
                      QPushButton::pressed,
                      this, MainWindow::toSelectActorWidget);
-
     // Game and stats widget
     QObject::connect(gameWidget->findChild<QPushButton *>("statsButt"),
                      QPushButton::pressed,
