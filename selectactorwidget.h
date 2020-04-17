@@ -19,6 +19,7 @@ public:
 
 public slots:
     void validateNewActor();
+    void cancelNewActor();
 
 private:
     Ui::SelectActorWidget *ui;
