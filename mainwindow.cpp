@@ -11,7 +11,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     // Stacking the different windows
     GameWidget *gameWidget = new GameWidget();
-    StatWidget *statWidget = new StatWidget();
+    StatWidget *statWidget = new StatWidget(this);
     SelectActorWidget *selectActorWidget = new SelectActorWidget(this);
     ui->stackedWidget->removeWidget(ui->stackedWidget->currentWidget());
     ui->stackedWidget->removeWidget(ui->stackedWidget->currentWidget());

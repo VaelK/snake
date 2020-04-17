@@ -14,6 +14,10 @@ class StatWidget : public QWidget
 public:
     explicit StatWidget(QWidget *parent = nullptr);
     ~StatWidget();
+    QWidget *parent;
+
+public slots:
+    void leaveStat();
 
 private:
     Ui::StatWidget *ui;
