@@ -22,12 +22,12 @@ MainWindow::MainWindow(QWidget *parent)
     //Connecting widgets together with button
     // Game and actor selection widgets
     QObject::connect(gameWidget->findChild<QPushButton *>("selectActorButt"),
-                     QPushButton::pressed,
-                     this, MainWindow::toSelectActorWidget);
+                     SIGNAL(pressed()),
+                     this, SLOT(toSelectActorWidget()));
     // Game and stats widget
     QObject::connect(gameWidget->findChild<QPushButton *>("statsButt"),
-                     QPushButton::pressed,
-                     this, MainWindow::toStatsWidget);
+                     SIGNAL(pressed()),
+                     this, SLOT(toStatsWidget()));
 
 }
 

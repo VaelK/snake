@@ -22,6 +22,7 @@ SOURCES += \
     gamewidget.cpp \
     main.cpp \
     mainwindow.cpp \
+    naiveactor.cpp \
     selectactorwidget.cpp \
     stats.cpp \
     statwidget.cpp
@@ -32,6 +33,7 @@ HEADERS += \
     gamelogic.h \
     gamewidget.h \
     mainwindow.h \
+    naiveactor.h \
     selectactorwidget.h \
     stats.h \
     statwidget.h
