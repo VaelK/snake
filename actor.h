@@ -14,7 +14,7 @@ public:
     Actor(std::string name = "new_actor");
 
     virtual void train(){};
-    virtual int perform(){};
+    virtual int perform(){ return 0; };
     void saveActor();
     void loadActor();
     std::unordered_map<std::string, double> getParams() const;

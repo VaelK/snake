@@ -19,6 +19,7 @@ SOURCES += \
     actor.cpp \
     boardwidget.cpp \
     gamelogic.cpp \
+    gameparameters.cpp \
     gamewidget.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -31,6 +32,7 @@ HEADERS += \
     actor.h \
     boardwidget.h \
     gamelogic.h \
+    gameparameters.h \
     gamewidget.h \
     mainwindow.h \
     naiveactor.h \
