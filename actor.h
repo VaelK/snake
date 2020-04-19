@@ -15,7 +15,8 @@ public:
 
     virtual void train(){};
     virtual int perform(){};
-    virtual void saveActor(){};
+    void saveActor();
+    void loadActor();
     std::unordered_map<std::string, double> getParams() const;
     void setParams(const std::unordered_map<std::string, double> &value);
     std::string getName() const;

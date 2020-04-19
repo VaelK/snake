@@ -1,6 +1,11 @@
 #include "actor.h"
 #include <sstream>
 #include <utility>
+#include <fstream>
+#include <string>
+#include <iostream>
+
+
 std::unordered_map<std::string, double> Actor::getParams() const
 {
     return params;
@@ -67,3 +72,15 @@ void Actor::str2actor(std::string actorString)
     this->setParams(params);
 }
 
+void Actor::saveActor(){
+    std::ofstream file("./data/actors/"+this->name+".txt");
+    file << this->actor2str();
+}
+
+void Actor::loadActor(){
+    std::ifstream in("./data/actors/"+this->name+".txt");
+    std::stringstream sstr;
+    sstr << in.rdbuf();
+    std::string actorString = sstr.str();
+    this->str2actor(actorString);
+}
