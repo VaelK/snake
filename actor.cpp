@@ -7,6 +7,8 @@
 #include <QDataStream>
 #include <QHash>
 #include <QFile>
+#include <QDirIterator>
+
 
 QDataStream &operator<<(QDataStream &out, const Actor &actor)
 {
@@ -66,32 +68,54 @@ void Actor::setCurrentDirection(int value)
     currentDirection = value;
 }
 
+QString Actor::getPathToSave() const
+{
+    return pathToSave;
+}
+
+void Actor::setPathToSave(const QString &value)
+{
+    pathToSave = value;
+}
+
 Actor::Actor(QString name)
 {
     this->name = name;
     this->currentDirection = 0;
+    this->pathToSave = "./data/actors/";
 }
 Actor::Actor(QString name, std::unordered_map<QString, double> params)
 {
     this->name = name;
     this->currentDirection = 0;
     this->params = params;
+    this->pathToSave = "./data/actors/";
 }
 
 Actor::~Actor(){}
 
 void Actor::saveActor(){
-    QString fileName ="./data/actors/"+this->name+".txt";
+    QString fileName = this->getPathToSave()+this->name+".txt";
     QFile file(fileName);
     QDataStream out(&file);
     out << this;
 }
 
 void Actor::loadActor(){
-    QString fileName ="./data/actors/"+this->name+".txt";
+    QString fileName = this->getPathToSave()+this->name+".txt";
     QFile file(fileName);
     QDataStream in(&file);
     in >> *this;
+}
+
+QList<QString> Actor::listActor(){
+    QList<QString> list;
+    QDirIterator dirIt(this->getPathToSave());
+    while (dirIt.hasNext()) {
+        QString fileName = dirIt.next();
+        list.append(fileName.left(fileName.length()-4));
+    }
+    return list;
 }
 
 
