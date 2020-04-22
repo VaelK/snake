@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QMainWindow>
+#include <actor.h>
 
 namespace Ui {
 class SelectActorWidget;
@@ -16,6 +17,7 @@ public:
     explicit SelectActorWidget(QWidget *parent = nullptr);
     ~SelectActorWidget();
     QWidget *parent;
+    static std::list<Actor> loadActors();
 
 public slots:
     void validateNewActor();
@@ -23,6 +25,7 @@ public slots:
 
 private:
     Ui::SelectActorWidget *ui;
+    std::list<Actor> listActor;
 };
 
 #endif // SELECTACTORWIDGET_H

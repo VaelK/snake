@@ -2,10 +2,12 @@
 #include "actor.h"
 #include <time.h>
 #include <stdlib.h>
+#include <QString>
 
-NaiveActor::NaiveActor(std::string name)
+NaiveActor::NaiveActor(QString name)
     : Actor{name}
 {
+    //Initializing the random number generator for perform function
     srand(time(NULL));
 }
 

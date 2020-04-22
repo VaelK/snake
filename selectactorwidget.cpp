@@ -4,6 +4,9 @@
 #include "QWidget"
 #include "QMainWindow"
 #include "QStackedWidget"
+#include "QDir"
+#include "QStringRef"
+#include "QDebug"
 
 SelectActorWidget::SelectActorWidget(QWidget *parent) :
     QWidget(parent),
@@ -17,6 +20,7 @@ SelectActorWidget::SelectActorWidget(QWidget *parent) :
                      SIGNAL(pressed()),
                      this, SLOT(validateNewActor()));
     this->parent = parent;
+    SelectActorWidget::loadActors();
 }
 
 SelectActorWidget::~SelectActorWidget()
@@ -34,3 +38,19 @@ void SelectActorWidget::cancelNewActor(){
     QStackedWidget *stackedWidget = this->parent->findChild<QStackedWidget *>("stackedWidget");
     stackedWidget->setCurrentIndex(0);
 }
+std::list<Actor> SelectActorWidget::loadActors()
+{
+    std::list<Actor> listActor;
+    QDir dir("/data/actors");
+    QStringList listFile = dir.entryList();
+    for (int i = 0; i < listFile.size(); ++i)
+    {
+        QStringRef subString(&listFile.at(i),0,listFile.at(i).size()-4);
+        qDebug() << listFile.at(i).left(listFile.at(i).size()-4);
+        Actor *act = new Actor(listFile.at(i).left(listFile.at(i).size()-4));
+        act->loadActor();
+        listActor.insert(listActor.begin(), *act);
+    }
+    return(listActor);
+}
+

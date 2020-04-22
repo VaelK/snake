@@ -2,26 +2,56 @@
 #include <sstream>
 #include <utility>
 #include <fstream>
-#include <string>
-#include <iostream>
+#include "QString"
+#include <QTextStream>
+#include <QDataStream>
+#include <QHash>
+#include <QFile>
 
+QDataStream &operator<<(QDataStream &out, const Actor &actor)
+{
+    out << actor.getName();
+    for(auto iter=actor.getParams().begin(); iter!=actor.getParams().end(); iter++){
+        out << iter->first;
+        out << QString::number(iter->second);
+    }
+    return out;
+}
 
-std::unordered_map<std::string, double> Actor::getParams() const
+QDataStream &operator>>(QDataStream &in, Actor &actor)
+{
+    QString name;
+    std::unordered_map<QString, double> params;
+    in >> name;
+    while (!(in.atEnd())) {
+        QString key;
+        QString val;
+        in >> key;
+        in >> val;
+        bool ok = false;
+        params.insert(std::make_pair(key, val.toDouble(&ok)));
+    }
+    actor.setName(name);
+    actor.setParams(params);
+    return in;
+}
+
+std::unordered_map<QString, double> Actor::getParams() const
 {
     return params;
 }
 
-void Actor::setParams(const std::unordered_map<std::string, double> &value)
+void Actor::setParams(const std::unordered_map<QString, double> &value)
 {
     params = value;
 }
 
-std::string Actor::getName() const
+QString Actor::getName() const
 {
     return name;
 }
 
-void Actor::setName(const std::string &value)
+void Actor::setName(const QString &value)
 {
     name = value;
 }
@@ -36,51 +66,32 @@ void Actor::setCurrentDirection(int value)
     currentDirection = value;
 }
 
-Actor::Actor(std::string name)
+Actor::Actor(QString name)
 {
     this->name = name;
     this->currentDirection = 0;
 }
+Actor::Actor(QString name, std::unordered_map<QString, double> params)
+{
+    this->name = name;
+    this->currentDirection = 0;
+    this->params = params;
+}
+
 Actor::~Actor(){}
 
-std::string Actor::actor2str()
-{
-    std::string actorString = "";
-    actorString += name;
-    for(auto iter=this->params.begin(); iter!=this->params.end(); iter++){
-        actorString += " ";
-        actorString += iter->first;
-        actorString += " ";
-        actorString += iter->second;
-    }
-    return actorString;
-}
-
-void Actor::str2actor(std::string actorString)
-{
-    std::istringstream iss(actorString);
-    iss >> name;
-    this->setName(name);
-    std::unordered_map<std::string, double> params = this->getParams();
-    std::string key = "";
-    double val = 0.0;
-    while (!iss.eof()) {
-        iss >> key;
-        iss >> val;
-        params.insert(std::make_pair(key, val));
-    }
-    this->setParams(params);
-}
-
 void Actor::saveActor(){
-    std::ofstream file("./data/actors/"+this->name+".txt");
-    file << this->actor2str();
+    QString fileName ="./data/actors/"+this->name+".txt";
+    QFile file(fileName);
+    QDataStream out(&file);
+    out << this;
 }
 
 void Actor::loadActor(){
-    std::ifstream in("./data/actors/"+this->name+".txt");
-    std::stringstream sstr;
-    sstr << in.rdbuf();
-    std::string actorString = sstr.str();
-    this->str2actor(actorString);
+    QString fileName ="./data/actors/"+this->name+".txt";
+    QFile file(fileName);
+    QDataStream in(&file);
+    in >> *this;
 }
+
+
