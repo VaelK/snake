@@ -1,6 +1,6 @@
 #ifndef BOARDWIDGET_H
 #define BOARDWIDGET_H
-
+#include <gameparameters.h>
 #include <QWidget>
 
 namespace Ui {
@@ -14,6 +14,7 @@ class BoardWidget : public QWidget
 public:
     explicit BoardWidget(QWidget *parent = nullptr);
     ~BoardWidget();
+    void paintEvent(QPaintEvent *e);
 
 private:
     Ui::BoardWidget *ui;

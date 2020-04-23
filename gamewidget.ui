@@ -128,7 +128,7 @@
       </layout>
      </item>
      <item>
-      <widget class="QWidget" name="boardWidget" native="true">
+      <widget class="QWidget" name="BoardWidget" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
          <horstretch>1</horstretch>
