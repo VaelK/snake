@@ -9,13 +9,10 @@ public:
 
     //Getters Setters
     int getBoardWidth() const;
-    void setBoardWidth(int value);
 
     int getBoardHeight() const;
-    void setBoardHeight(int value);
 
     int getActionPerMinutes() const;
-    void setActionPerMinutes(int value);
 
     Actor getCurrentActor() const;
     void setCurrentActor(const Actor &value);

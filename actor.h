@@ -9,19 +9,19 @@
 class Actor
 {
 private:
-    std::unordered_map<QString, double> params;
+    QHash<QString, double> params;
     QString name;
     int currentDirection;
     QString pathToSave;
 public:
     //Constructor
     Actor(QString name = "new_actor");
-    Actor(QString name, std::unordered_map<QString, double> params);
+    Actor(QString name, QHash<QString, double> params);
 
     //Method
     //getter, setters
-    std::unordered_map<QString, double> getParams() const;
-    void setParams(const std::unordered_map<QString, double> &value);
+    QHash<QString, double> getParams() const;
+    void setParams(const QHash<QString, double> &value);
     QString getName() const;
     void setName(const QString &value);
     int getCurrentDirection() const;

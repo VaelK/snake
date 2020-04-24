@@ -30,19 +30,10 @@ int GameParameters::getActionPerMinutes() const
     return actionPerMinutes;
 }
 
-void GameParameters::setActionPerMinutes(int value)
-{
-    actionPerMinutes = value;
-}
 
 int GameParameters::getBoardHeight() const
 {
     return boardHeight;
-}
-
-void GameParameters::setBoardHeight(int value)
-{
-    boardHeight = value;
 }
 
 int GameParameters::getBoardWidth() const
@@ -50,10 +41,6 @@ int GameParameters::getBoardWidth() const
     return boardWidth;
 }
 
-void GameParameters::setBoardWidth(int value)
-{
-    boardWidth = value;
-}
 
 GameParameters& GameParameters::Instance()
 {

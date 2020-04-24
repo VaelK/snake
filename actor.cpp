@@ -14,8 +14,8 @@ QDataStream &operator<<(QDataStream &out, const Actor &actor)
 {
     out << actor.getName();
     for(auto iter=actor.getParams().begin(); iter!=actor.getParams().end(); iter++){
-        out << iter->first;
-        out << QString::number(iter->second);
+        out << iter.key();
+        out << QString::number(iter.value());
     }
     return out;
 }
@@ -23,7 +23,7 @@ QDataStream &operator<<(QDataStream &out, const Actor &actor)
 QDataStream &operator>>(QDataStream &in, Actor &actor)
 {
     QString name;
-    std::unordered_map<QString, double> params;
+    QHash<QString, double> params;
     in >> name;
     while (!(in.atEnd())) {
         QString key;
@@ -31,19 +31,19 @@ QDataStream &operator>>(QDataStream &in, Actor &actor)
         in >> key;
         in >> val;
         bool ok = false;
-        params.insert(std::make_pair(key, val.toDouble(&ok)));
+        params.insert(key, val.toDouble(&ok));
     }
     actor.setName(name);
     actor.setParams(params);
     return in;
 }
 
-std::unordered_map<QString, double> Actor::getParams() const
+QHash<QString, double> Actor::getParams() const
 {
     return params;
 }
 
-void Actor::setParams(const std::unordered_map<QString, double> &value)
+void Actor::setParams(const QHash<QString, double> &value)
 {
     params = value;
 }
@@ -84,7 +84,7 @@ Actor::Actor(QString name)
     this->currentDirection = 0;
     this->pathToSave = "./data/actors/";
 }
-Actor::Actor(QString name, std::unordered_map<QString, double> params)
+Actor::Actor(QString name, QHash<QString, double> params)
 {
     this->name = name;
     this->currentDirection = 0;
