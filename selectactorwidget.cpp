@@ -13,12 +13,12 @@ SelectActorWidget::SelectActorWidget(QWidget *parent) :
     ui(new Ui::SelectActorWidget)
 {
     ui->setupUi(this);
-    QObject::connect(this->findChild<QPushButton *>("okButt"),
+    QObject::connect(ui->okButt,
                      SIGNAL(pressed()),
                      this, SLOT(validateNewActor()));
-    QObject::connect(this->findChild<QPushButton *>("cancelButt"),
+    QObject::connect(ui->cancelButt,
                      SIGNAL(pressed()),
-                     this, SLOT(validateNewActor()));
+                     this, SLOT(cancelNewActor()));
     this->parent = parent;
     QString pathToSave = "./data/actors/";
     QList<Actor> listActor = this->loadActors();
@@ -32,17 +32,15 @@ SelectActorWidget::~SelectActorWidget()
 
 void SelectActorWidget::validateNewActor(){
     //TODO Add here logic that deal with updating (or not if no change) the current actor
-    QStackedWidget *stackedWidget = this->parent->findChild<QStackedWidget *>("stackedWidget");
-    stackedWidget->setCurrentIndex(0);
     //Get the name of the selected actor from the list in the UI
     Actor actor = Actor();
     //Create the actor and set it as the current one
     this->setCurrentActor(actor);
+    this->toGameWidget();
 }
 
 void SelectActorWidget::cancelNewActor(){
-    QStackedWidget *stackedWidget = this->parent->findChild<QStackedWidget *>("stackedWidget");
-    stackedWidget->setCurrentIndex(0);
+    this->toGameWidget();
 }
 QList<Actor> SelectActorWidget::loadActors()
 {

@@ -9,16 +9,11 @@ StatWidget::StatWidget(QWidget *parent) :
     ui->setupUi(this);
     QObject::connect(ui->leaveStatButt,
                      SIGNAL(pressed()),
-                     this, SLOT(leaveStat()));
+                     this, SIGNAL(toGameWidget()));
     this->parent = parent;
 }
 
 StatWidget::~StatWidget()
 {
     delete ui;
-}
-
-void StatWidget::leaveStat(){
-    QStackedWidget *stackedWidget = this->parent->findChild<QStackedWidget *>("stackedWidget");
-    stackedWidget->setCurrentIndex(0);
 }

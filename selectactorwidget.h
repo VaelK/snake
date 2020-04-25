@@ -22,8 +22,10 @@ public:
 public slots:
     void validateNewActor();
     void cancelNewActor();
+
 signals:
     void sendCurrentActor(Actor actor);
+    void toGameWidget();
 
 private:
     Ui::SelectActorWidget *ui;

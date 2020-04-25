@@ -16,8 +16,8 @@ public:
     ~StatWidget();
     QWidget *parent;
 
-public slots:
-    void leaveStat();
+signals:
+    void toGameWidget();
 
 private:
     Ui::StatWidget *ui;

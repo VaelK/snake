@@ -17,6 +17,10 @@ public:
 
 private:
     Ui::GameWidget *ui;
+
+signals:
+    void toStatsWidget();
+    void toSelectActorWidget();
 };
 
 #endif // GAMEWIDGET_H
