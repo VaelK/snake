@@ -20,7 +20,9 @@ SelectActorWidget::SelectActorWidget(QWidget *parent) :
                      SIGNAL(pressed()),
                      this, SLOT(validateNewActor()));
     this->parent = parent;
-    SelectActorWidget::loadActors();
+    QString pathToSave = "./data/actors/";
+    QList<Actor> listActor = this->loadActors();
+    this->setCurrentActor(listActor[0]);
 }
 
 SelectActorWidget::~SelectActorWidget()
@@ -32,25 +34,34 @@ void SelectActorWidget::validateNewActor(){
     //TODO Add here logic that deal with updating (or not if no change) the current actor
     QStackedWidget *stackedWidget = this->parent->findChild<QStackedWidget *>("stackedWidget");
     stackedWidget->setCurrentIndex(0);
+    //Get the name of the selected actor from the list in the UI
+    Actor actor = Actor();
+    //Create the actor and set it as the current one
+    this->setCurrentActor(actor);
 }
 
 void SelectActorWidget::cancelNewActor(){
     QStackedWidget *stackedWidget = this->parent->findChild<QStackedWidget *>("stackedWidget");
     stackedWidget->setCurrentIndex(0);
 }
-std::list<Actor> SelectActorWidget::loadActors()
+QList<Actor> SelectActorWidget::loadActors()
 {
-    std::list<Actor> listActor;
-    QDir dir("/data/actors");
+    QList<Actor> listActor;
+    QDir dir(this->pathToSave);
     QStringList listFile = dir.entryList();
     for (int i = 0; i < listFile.size(); ++i)
     {
         QStringRef subString(&listFile.at(i),0,listFile.at(i).size()-4);
         qDebug() << listFile.at(i).left(listFile.at(i).size()-4);
         Actor *act = new Actor(listFile.at(i).left(listFile.at(i).size()-4));
-        act->loadActor();
+        act->loadActor(this->pathToSave);
         listActor.insert(listActor.begin(), *act);
     }
     return(listActor);
+}
+
+void SelectActorWidget::setCurrentActor(Actor actor){
+    this->currentActor = actor;
+    this->sendCurrentActor(actor);
 }
 

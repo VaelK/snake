@@ -30,14 +30,11 @@ public:
     //Other methods
     virtual void train(){};
     virtual int perform(){ return 0; };
-    void saveActor();
-    void loadActor();
-    QList<QString> listActor();
+    void saveActor(QString);
+    void loadActor(QString);
 
     //Destructor
     virtual ~Actor();
-    QString getPathToSave() const;
-    void setPathToSave(const QString &value);
 };
 
 QDataStream &operator<<(QDataStream &out, const Actor &actor);

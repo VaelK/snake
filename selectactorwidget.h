@@ -17,15 +17,20 @@ public:
     explicit SelectActorWidget(QWidget *parent = nullptr);
     ~SelectActorWidget();
     QWidget *parent;
-    static std::list<Actor> loadActors();
+    QList<Actor> loadActors();
 
 public slots:
     void validateNewActor();
     void cancelNewActor();
+signals:
+    void sendCurrentActor(Actor actor);
 
 private:
     Ui::SelectActorWidget *ui;
-    std::list<Actor> listActor;
+    QList<Actor> listActor;
+    QString pathToSave;
+    Actor currentActor;
+    void setCurrentActor(Actor);
 };
 
 #endif // SELECTACTORWIDGET_H

@@ -20,7 +20,6 @@ private:
     int boardWidth;
     int boardHeight;
     int actionPerMinutes;
-
 };
 
 #endif // BOARDWIDGET_H

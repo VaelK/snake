@@ -68,53 +68,30 @@ void Actor::setCurrentDirection(int value)
     currentDirection = value;
 }
 
-QString Actor::getPathToSave() const
-{
-    return pathToSave;
-}
-
-void Actor::setPathToSave(const QString &value)
-{
-    pathToSave = value;
-}
-
 Actor::Actor(QString name)
 {
     this->name = name;
     this->currentDirection = 0;
-    this->pathToSave = "./data/actors/";
 }
 Actor::Actor(QString name, QHash<QString, double> params)
 {
     this->name = name;
     this->currentDirection = 0;
     this->params = params;
-    this->pathToSave = "./data/actors/";
 }
 
 Actor::~Actor(){}
 
-void Actor::saveActor(){
-    QString fileName = this->getPathToSave()+this->name+".txt";
+void Actor::saveActor(QString pathToSave){
+    QString fileName = pathToSave+this->name+".txt";
     QFile file(fileName);
     QDataStream out(&file);
     out << this;
 }
 
-void Actor::loadActor(){
-    QString fileName = this->getPathToSave()+this->name+".txt";
+void Actor::loadActor(QString pathToSave){
+    QString fileName = pathToSave+this->name+".txt";
     QFile file(fileName);
     QDataStream in(&file);
     in >> *this;
 }
-
-QList<QString> Actor::listActor(){
-    QList<QString> list;
-    QDirIterator dirIt(this->getPathToSave());
-    while (dirIt.hasNext()) {
-        QString fileName = dirIt.next();
-        list.append(fileName.left(fileName.length()-4));
-    }
-    return list;
-}
-
