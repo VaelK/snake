@@ -10,6 +10,9 @@ BoardWidget::BoardWidget(QWidget *parent) :
     ui(new Ui::BoardWidget)
 {
     ui->setupUi(this);
+    this->boardWidth = 30;
+    this->boardHeight = 30;
+    this->actionPerMinutes = 120;
 }
 
 BoardWidget::~BoardWidget()
@@ -25,8 +28,8 @@ void BoardWidget::paintEvent(QPaintEvent *e)
     pen.setWidth(1);
     painter.setPen(pen);
     //horizontal lines
-    int h = GameParameters::Instance().getBoardHeight();
-    int w = GameParameters::Instance().getBoardWidth();
+    int& h = this->boardHeight;
+    int& w = this->boardWidth;
     for (int iter=0; iter<=h; iter++){
         QPoint p1;
         p1.setX(0);
@@ -46,8 +49,4 @@ void BoardWidget::paintEvent(QPaintEvent *e)
         p2.setY(qFloor(this->geometry().height()/h) * h);
         painter.drawLine(p1, p2);
     }
-    qDebug() << w;
-    qDebug() << "Drawing " << QWidget::width()/w;
-    qDebug() << QWidget::height()/w;
-    qDebug() << this->geometry().width();
 }

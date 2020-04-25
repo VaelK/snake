@@ -4,6 +4,7 @@
 #include "statwidget.h"
 #include "selectactorwidget.h"
 #include "QPushButton"
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -28,7 +29,6 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(gameWidget->findChild<QPushButton *>("statsButt"),
                      SIGNAL(pressed()),
                      this, SLOT(toStatsWidget()));
-
 }
 
 MainWindow::~MainWindow()

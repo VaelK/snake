@@ -5,6 +5,7 @@
 #include <ostream>
 #include "QString"
 #include <QHash>
+#include "QObject"
 
 class Actor
 {

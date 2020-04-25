@@ -118,4 +118,3 @@ QList<QString> Actor::listActor(){
     return list;
 }
 
-

@@ -1,6 +1,5 @@
 #ifndef BOARDWIDGET_H
 #define BOARDWIDGET_H
-#include <gameparameters.h>
 #include <QWidget>
 
 namespace Ui {
@@ -18,6 +17,10 @@ public:
 
 private:
     Ui::BoardWidget *ui;
+    int boardWidth;
+    int boardHeight;
+    int actionPerMinutes;
+
 };
 
 #endif // BOARDWIDGET_H
