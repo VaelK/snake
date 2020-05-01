@@ -2,14 +2,15 @@
 #define NAIVEACTOR_H
 #include <actor.h>
 #include <QString>
+#include <direction.h>
+#include <celltype.h>
 
-class NaiveActor: Actor
+class NaiveActor: public Actor
 {
 public:
     NaiveActor(QString name = "new_naive_actor");
     void train();
-    int perform();
-    void saveActor();
+    Direction perform(Direction currentDirection, QList<Direction> position, QList<QList<CellType>> boardState);
 };
 
 #endif // NAIVEACTOR_H

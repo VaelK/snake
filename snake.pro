@@ -30,6 +30,8 @@ SOURCES += \
 HEADERS += \
     actor.h \
     boardwidget.h \
+    celltype.h \
+    direction.h \
     gamelogic.h \
     gamewidget.h \
     mainwindow.h \

@@ -6,13 +6,15 @@
 #include "QString"
 #include <QHash>
 #include "QObject"
+#include "QTextStream"
+#include <direction.h>
+#include <celltype.h>
 
 class Actor
 {
 private:
     QHash<QString, double> params;
     QString name;
-    int currentDirection;
     QString pathToSave;
 public:
     //Constructor
@@ -25,19 +27,14 @@ public:
     void setParams(const QHash<QString, double> &value);
     QString getName() const;
     void setName(const QString &value);
-    int getCurrentDirection() const;
-    void setCurrentDirection(int value);
     //Other methods
     virtual void train(){};
-    virtual int perform(){ return 0; };
-    void saveActor(QString);
-    void loadActor(QString);
+    virtual Direction perform(Direction, QList<Direction>, QList<QList<CellType>>){};
+    static void saveActor(QString path, Actor &actor);
+    static void loadActor(QString path, Actor &actor);
 
     //Destructor
     virtual ~Actor();
 };
-
-QDataStream &operator<<(QDataStream &out, const Actor &actor);
-QDataStream &operator>>(QDataStream &in, Actor &actor);
 
 #endif // ACTOR_H

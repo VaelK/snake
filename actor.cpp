@@ -8,19 +8,21 @@
 #include <QHash>
 #include <QFile>
 #include <QDirIterator>
+#include <QDebug>
 
-
-QDataStream &operator<<(QDataStream &out, const Actor &actor)
+QTextStream& operator<<(QTextStream& out, const Actor& actor)
 {
-    out << actor.getName();
-    for(auto iter=actor.getParams().begin(); iter!=actor.getParams().end(); iter++){
-        out << iter.key();
-        out << QString::number(iter.value());
+    //out << actor.getName();
+    if (actor.getParams().count() > 0){
+        for(QHash<QString, double>::iterator iter=actor.getParams().begin(); iter!=actor.getParams().end(); iter++){
+            out << iter.key();
+            out << QString::number(iter.value());
+        }
     }
     return out;
 }
 
-QDataStream &operator>>(QDataStream &in, Actor &actor)
+QDataStream &operator>>(QDataStream& in, Actor& actor)
 {
     QString name;
     QHash<QString, double> params;
@@ -58,40 +60,35 @@ void Actor::setName(const QString &value)
     name = value;
 }
 
-int Actor::getCurrentDirection() const
-{
-    return currentDirection;
-}
-
-void Actor::setCurrentDirection(int value)
-{
-    currentDirection = value;
-}
-
 Actor::Actor(QString name)
 {
     this->name = name;
-    this->currentDirection = 0;
+    this->params = QHash<QString, double>();
 }
 Actor::Actor(QString name, QHash<QString, double> params)
 {
     this->name = name;
-    this->currentDirection = 0;
     this->params = params;
 }
 
 Actor::~Actor(){}
 
-void Actor::saveActor(QString pathToSave){
-    QString fileName = pathToSave+this->name+".txt";
+void Actor::saveActor(QString pathToSave, Actor &actor){
+    QString fileName = pathToSave+actor.getName()+".txt";
     QFile file(fileName);
-    QDataStream out(&file);
-    out << this;
+    file.open(file.ReadWrite);
+    QTextStream out(&file);
+    qDebug() << actor.getName();
+    out << actor;
+    qDebug() << "Wrting done";
+    file.close();
 }
 
-void Actor::loadActor(QString pathToSave){
-    QString fileName = pathToSave+this->name+".txt";
+void Actor::loadActor(QString pathToSave, Actor &actor){
+    QString fileName = pathToSave+actor.getName()+".txt";
     QFile file(fileName);
+    file.open(file.ReadOnly);
     QDataStream in(&file);
-    in >> *this;
+    in >> actor;
+    file.close();
 }

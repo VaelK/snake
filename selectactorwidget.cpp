@@ -7,6 +7,9 @@
 #include "QDir"
 #include "QStringRef"
 #include "QDebug"
+#include "naiveactor.h"
+#include "actor.h"
+#include "naiveactor.h"
 
 SelectActorWidget::SelectActorWidget(QWidget *parent) :
     QWidget(parent),
@@ -20,7 +23,7 @@ SelectActorWidget::SelectActorWidget(QWidget *parent) :
                      SIGNAL(pressed()),
                      this, SLOT(cancelNewActor()));
     this->parent = parent;
-    QString pathToSave = "./data/actors/";
+    this->pathToSave = "./data/actors/";
     QList<Actor> listActor = this->loadActors();
     this->setCurrentActor(listActor[0]);
 }
@@ -45,15 +48,21 @@ void SelectActorWidget::cancelNewActor(){
 QList<Actor> SelectActorWidget::loadActors()
 {
     QList<Actor> listActor;
-    QDir dir(this->pathToSave);
+    QDir dir(this->pathToSave, ".txt");
     QStringList listFile = dir.entryList();
     for (int i = 0; i < listFile.size(); ++i)
     {
-        QStringRef subString(&listFile.at(i),0,listFile.at(i).size()-4);
-        qDebug() << listFile.at(i).left(listFile.at(i).size()-4);
-        Actor *act = new Actor(listFile.at(i).left(listFile.at(i).size()-4));
-        act->loadActor(this->pathToSave);
-        listActor.insert(listActor.begin(), *act);
+        Actor actor = Actor(listFile.at(i));
+        qDebug() << actor.getName();
+        Actor::loadActor(this->pathToSave, actor);
+        listActor.insert(listActor.begin(), actor);
+        qDebug() << listActor.length();
+    }
+    // test if list is empty, then create a default actor here
+    if (listActor.empty()){
+        NaiveActor actor= NaiveActor();
+        listActor.insert(listActor.begin(), actor);
+        Actor::saveActor(this->pathToSave, actor);
     }
     return(listActor);
 }
