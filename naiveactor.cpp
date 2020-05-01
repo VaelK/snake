@@ -17,7 +17,7 @@ NaiveActor::NaiveActor(QString name)
 void NaiveActor::train(){
 
 }
-Direction NaiveActor::perform(Direction currentDirection, QList<Direction> position, QList<QList<CellType>> boardState){
+Direction NaiveActor::perform(Direction currentDirection, QList<int> position, QList<QList<CellType>> boardState){
     //First we decide if we change direction
     int change_direction = (rand() % 100) > 80;
     if (change_direction){

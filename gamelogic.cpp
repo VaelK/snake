@@ -1,8 +1,37 @@
 #include "gamelogic.h"
 #include "actor.h"
 #include "QList"
+#include "QWidget"
+#include "qmath.h"
 
-GameLogic::GameLogic()
-{
+GameLogic::GameLogic(QObject *parent, int boardWidth, int boardHeight, int actionPerMinutes)
+    : QObject(parent){
+    this->boardWidth = boardWidth;
+    this->boardHeight = boardHeight;
+    this->actionPerMinutes = actionPerMinutes;
+    this->snakePosition = {this->boardWidth/2, this->boardHeight/2};
+    this->currentDirection = Direction::up;
+    this->snakeLen = 3;
+    this->boardState = {};
+    this->initBoardStat();
+}
+void GameLogic::startGame(){
 
+}
+void GameLogic::stopGame(){
+
+}
+
+void GameLogic::initBoardStat(){
+    this->boardState = {};
+    for (int i=0; i<this->boardHeight; i++){
+        QList<CellType> row = {};
+        for (int j=0; j<this->boardWidth; j++){
+            row.insert(0, CellType::empty);
+        }
+        this->boardState.insert(0, row);
+    }
+    for (int i=0; i<this->snakeLen; i++){
+        this->boardState[this->snakePosition[0]-i][this->snakePosition[1]] = CellType::snake;
+    }
 }

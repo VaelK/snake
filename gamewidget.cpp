@@ -19,6 +19,12 @@ GameWidget::GameWidget(QWidget *parent) :
     QObject::connect(ui->selectActorButt,
                      SIGNAL(pressed()),
                      this, SIGNAL(toSelectActorWidget()));
+    QObject::connect(ui->startButt,
+                     SIGNAL(pressed()),
+                     this, SIGNAL(startGame()));
+    QObject::connect(ui->stopButt,
+                     SIGNAL(pressed()),
+                     this, SIGNAL(stopGame()));
 }
 
 GameWidget::~GameWidget()
