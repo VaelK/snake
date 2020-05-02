@@ -29,7 +29,7 @@ public:
     void setName(const QString &value);
     //Other methods
     virtual void train(){};
-    virtual Direction perform(Direction, QList<int>, QList<QList<CellType>>){};
+    virtual Direction perform(Direction, QList<int>, QList<QList<CellType>>){return Direction::up;};
     static void saveActor(QString path, Actor &actor);
     static void loadActor(QString path, Actor &actor);
 

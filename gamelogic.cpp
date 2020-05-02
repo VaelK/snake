@@ -3,17 +3,19 @@
 #include "QList"
 #include "QWidget"
 #include "qmath.h"
+#include "boardwidget.h"
+#include "QDebug"
 
-GameLogic::GameLogic(QObject *parent, int boardWidth, int boardHeight, int actionPerMinutes)
+GameLogic::GameLogic(BoardWidget *parent)
     : QObject(parent){
-    this->boardWidth = boardWidth;
-    this->boardHeight = boardHeight;
-    this->actionPerMinutes = actionPerMinutes;
+    this->boardWidth = parent->getBoardWidth();
+    this->boardHeight = parent->getBoardHeight();
+    this->actionPerMinutes = 120;
     this->snakePosition = {this->boardWidth/2, this->boardHeight/2};
     this->currentDirection = Direction::up;
     this->snakeLen = 3;
     this->boardState = {};
-    this->initBoardStat();
+    //this->initBoardStat();
     this->newBoardState(this->boardState);
 }
 void GameLogic::startGame(){
@@ -35,5 +37,6 @@ void GameLogic::initBoardStat(){
     for (int i=0; i<this->snakeLen; i++){
         this->boardState[this->snakePosition[0]-i][this->snakePosition[1]] = CellType::snake;
     }
-    this->newBoardState(this->boardState)
+    qDebug() << "Sending board";
+    this->newBoardState(this->boardState);
 }

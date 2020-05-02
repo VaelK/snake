@@ -48,15 +48,16 @@ void SelectActorWidget::cancelNewActor(){
 QList<Actor> SelectActorWidget::loadActors()
 {
     QList<Actor> listActor;
-    QDir dir(this->pathToSave, ".txt");
+    QDir dir(this->pathToSave, "*.txt");
     QStringList listFile = dir.entryList();
     for (int i = 0; i < listFile.size(); ++i)
     {
-        Actor actor = Actor(listFile.at(i));
-        qDebug() << actor.getName();
+        qDebug() << "Reading file:";
+        qDebug() << listFile.at(i);
+        Actor actor = Actor(listFile.at(i).left(listFile.at(i).length()-4));
         Actor::loadActor(this->pathToSave, actor);
         listActor.insert(listActor.begin(), actor);
-        qDebug() << listActor.length();
+
     }
     // test if list is empty, then create a default actor here
     if (listActor.empty()){

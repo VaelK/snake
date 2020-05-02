@@ -4,6 +4,7 @@
 #include <QList>
 #include <direction.h>
 #include <celltype.h>
+#include <boardwidget.h>
 
 class GameLogic : public QObject
 {
@@ -18,7 +19,7 @@ private:
     int snakeLen;
 
 public:
-    GameLogic(QObject *parent = nullptr, int boardWidth=0, int boardHeight=0, int actionPerMinutes=0);
+    GameLogic(BoardWidget *parent = nullptr);
     virtual ~GameLogic() {}
     void initBoardStat();
 

@@ -4,6 +4,9 @@
 #include "statwidget.h"
 #include "selectactorwidget.h"
 #include "QPushButton"
+#include "boardwidget.h"
+#include "gamelogic.h"
+#include "celltype.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -33,6 +36,14 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(gameWidget,
                      SIGNAL(toSelectActorWidget()),
                      this, SLOT(toSelectActorWidget()));
+    BoardWidget *board = gameWidget->findChild<BoardWidget*>("board");
+    GameLogic *gameLogic = new GameLogic(board);
+    //Board update:
+    QObject::connect(gameLogic,
+                     &GameLogic::newBoardState,
+                     board,
+                     &BoardWidget::newBoardState);
+    gameLogic->initBoardStat();
 }
 
 MainWindow::~MainWindow()

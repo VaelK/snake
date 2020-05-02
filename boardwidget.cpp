@@ -12,7 +12,6 @@ BoardWidget::BoardWidget(QWidget *parent, QList<QList<CellType>> boardState) :
     ui->setupUi(this);
     this->boardWidth = 30;
     this->boardHeight = 30;
-    this->actionPerMinutes = 120;
     this->boardState = boardState;
 }
 
@@ -24,6 +23,7 @@ BoardWidget::~BoardWidget()
 void BoardWidget::paintEvent(QPaintEvent *e)
 {
     // Coor parameters
+    qDebug() << "Painting";
     QColor appleColor = Qt::red;
     QColor snakeColor = Qt::black;
     QColor gridColor = Qt::gray;
@@ -61,6 +61,7 @@ void BoardWidget::paintEvent(QPaintEvent *e)
         painter.drawLine(p1, p2);
     }
     if (this->boardState.length() != 0){
+        qDebug() << "Printing snake";
         //Drawing the snake and the apple.
         QPen penApple(appleColor);
         QPen penSnake(snakeColor);
@@ -75,11 +76,13 @@ void BoardWidget::paintEvent(QPaintEvent *e)
                     painter.setPen(penApple);
                     rect = QRect(xpos[j], ypos[i], w, h);
                     painter.drawRect(rect);
+                    break;
                 case CellType::snake:
                     painter.setBrush(snakeColor);
                     painter.setPen(penSnake);
                     rect = QRect(xpos[j], ypos[i], w, h);
                     painter.drawRect(rect);
+                    break;
                 case CellType::empty:
                     continue;
                 }
@@ -88,7 +91,18 @@ void BoardWidget::paintEvent(QPaintEvent *e)
     }
 }
 
-void BoardWidget::newBoardStat(QList<QList<CellType>> boardState){
+int BoardWidget::getBoardWidth() const
+{
+    return boardWidth;
+}
+
+int BoardWidget::getBoardHeight() const
+{
+    return boardHeight;
+}
+
+void BoardWidget::newBoardState(QList<QList<CellType>> boardState){
     this->boardState = boardState;
+    qDebug() << "New board recieved";
     this->update();
 }

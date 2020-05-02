@@ -16,6 +16,10 @@ public:
     ~BoardWidget();
     void paintEvent(QPaintEvent *e);
 
+    int getBoardWidth() const;
+
+    int getBoardHeight() const;
+
 private:
     Ui::BoardWidget *ui;
     int boardWidth;
@@ -24,7 +28,7 @@ private:
     QList<QList<CellType>> boardState;
 
 public slots:
-    void newBoardStat(QList<QList<CellType>>);
+    void newBoardState(QList<QList<CellType>>);
 };
 
 #endif // BOARDWIDGET_H
