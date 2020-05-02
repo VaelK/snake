@@ -25,6 +25,9 @@ public:
 public slots:
     void startGame();
     void stopGame();
+
+signals:
+    void newBoardState(QList<QList<CellType>>);
 };
 
 #endif // GAMELOGIC_H

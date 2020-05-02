@@ -90,5 +90,6 @@ void Actor::loadActor(QString pathToSave, Actor &actor){
     file.open(file.ReadOnly);
     QDataStream in(&file);
     in >> actor;
+    qDebug() << "Reading done";
     file.close();
 }

@@ -14,6 +14,7 @@ GameLogic::GameLogic(QObject *parent, int boardWidth, int boardHeight, int actio
     this->snakeLen = 3;
     this->boardState = {};
     this->initBoardStat();
+    this->newBoardState(this->boardState);
 }
 void GameLogic::startGame(){
 
@@ -34,4 +35,5 @@ void GameLogic::initBoardStat(){
     for (int i=0; i<this->snakeLen; i++){
         this->boardState[this->snakePosition[0]-i][this->snakePosition[1]] = CellType::snake;
     }
+    this->newBoardState(this->boardState)
 }

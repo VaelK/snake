@@ -2,6 +2,7 @@
 #define GAMEWIDGET_H
 
 #include <QWidget>
+#include <celltype.h>
 
 namespace Ui {
 class GameWidget;
