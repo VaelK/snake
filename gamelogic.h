@@ -10,25 +10,25 @@ class GameLogic : public QObject
 {
     Q_OBJECT
 private:
-    QList<int> snakePosition;
+    QVector<int> snakePosition;
     Direction currentDirection;
-    QList<QList<CellType>> boardState;
     int boardWidth;
     int boardHeight;
     int actionPerMinutes;
     int snakeLen;
+    BoardWidget *boardWidget;
 
 public:
     GameLogic(BoardWidget *parent = nullptr);
     virtual ~GameLogic() {}
-    void initBoardStat();
+    void drawSnake();
+
+signals:
+    void setBoardCell(int i, int j, CellType c);
 
 public slots:
     void startGame();
     void stopGame();
-
-signals:
-    void newBoardState(QList<QList<CellType>>);
 };
 
 #endif // GAMELOGIC_H

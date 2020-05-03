@@ -7,6 +7,7 @@
 #include "boardwidget.h"
 #include "gamelogic.h"
 #include "celltype.h"
+#include "QDebug"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -38,12 +39,10 @@ MainWindow::MainWindow(QWidget *parent)
                      this, SLOT(toSelectActorWidget()));
     BoardWidget *board = gameWidget->findChild<BoardWidget*>("board");
     GameLogic *gameLogic = new GameLogic(board);
-    //Board update:
     QObject::connect(gameLogic,
-                     &GameLogic::newBoardState,
-                     board,
-                     &BoardWidget::newBoardState);
-    gameLogic->initBoardStat();
+                     SIGNAL(setBoardCell(int, int, CellType)),
+                     board, SLOT(setBoardCell(int, int, CellType)));
+    gameLogic->drawSnake();
 }
 
 MainWindow::~MainWindow()

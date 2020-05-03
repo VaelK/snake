@@ -12,12 +12,10 @@ class BoardWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit BoardWidget(QWidget *parent = nullptr, QList<QList<CellType>> boardState = {});
+    explicit BoardWidget(QWidget *parent = nullptr);
     ~BoardWidget();
     void paintEvent(QPaintEvent *e);
-
     int getBoardWidth() const;
-
     int getBoardHeight() const;
 
 private:
@@ -25,10 +23,10 @@ private:
     int boardWidth;
     int boardHeight;
     int actionPerMinutes;
-    QList<QList<CellType>> boardState;
+    QVector<QVector<CellType>> boardState;
 
 public slots:
-    void newBoardState(QList<QList<CellType>>);
+    void setBoardCell(int i, int j, CellType c);
 };
 
 #endif // BOARDWIDGET_H

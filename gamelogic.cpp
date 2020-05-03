@@ -14,9 +14,8 @@ GameLogic::GameLogic(BoardWidget *parent)
     this->snakePosition = {this->boardWidth/2, this->boardHeight/2};
     this->currentDirection = Direction::up;
     this->snakeLen = 3;
-    this->boardState = {};
-    //this->initBoardStat();
-    this->newBoardState(this->boardState);
+    this->boardWidget = parent;
+    this->drawSnake();
 }
 void GameLogic::startGame(){
 
@@ -25,18 +24,8 @@ void GameLogic::stopGame(){
 
 }
 
-void GameLogic::initBoardStat(){
-    this->boardState = {};
-    for (int i=0; i<this->boardHeight; i++){
-        QList<CellType> row = {};
-        for (int j=0; j<this->boardWidth; j++){
-            row.insert(0, CellType::empty);
-        }
-        this->boardState.insert(0, row);
-    }
+void GameLogic::drawSnake(){
     for (int i=0; i<this->snakeLen; i++){
-        this->boardState[this->snakePosition[0]-i][this->snakePosition[1]] = CellType::snake;
+        this->setBoardCell(this->snakePosition[0]-i, this->snakePosition[1], CellType::snake);
     }
-    qDebug() << "Sending board";
-    this->newBoardState(this->boardState);
 }
