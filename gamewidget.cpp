@@ -27,4 +27,3 @@ GameWidget::~GameWidget()
 {
     delete ui;
 }
-

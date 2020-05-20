@@ -10,9 +10,10 @@ BoardWidget::BoardWidget(QWidget *parent) :
     ui(new Ui::BoardWidget)
 {
     ui->setupUi(this);
-    this->boardWidth = 30;
+    this->boardWidth = 40;
     this->boardHeight = 30;
-    this->boardState = QVector<QVector<CellType>>(this->boardHeight, QVector<CellType>(this->boardWidth));
+    this->boardState = QVector<QVector<CellType>>(this->boardWidth, QVector<CellType>(this->boardHeight)); // convention x, y. x = abscisse, y = ordonne
+    this->isEnded = false;
 }
 
 BoardWidget::~BoardWidget()
@@ -22,6 +23,7 @@ BoardWidget::~BoardWidget()
 
 void BoardWidget::paintEvent(QPaintEvent *e)
 {
+    qDebug() << "Paint event updating now...";
     // Coor parameters
     QColor appleColor = Qt::red;
     QColor snakeColor = Qt::black;
@@ -66,19 +68,19 @@ void BoardWidget::paintEvent(QPaintEvent *e)
         QPen penGrid(gridColor);
         penApple.setWidth(1);
         QRect rect;
-        for (int i=0; i<this->boardState.length(); ++i){
-            for (int j=0; j<this->boardState[i].length(); ++j){
-                switch(this->boardState[i][j]){
+        for (int x=0; x<this->boardState.length(); ++x){
+            for (int y=0; y<this->boardState[x].length(); ++y){
+                switch(this->boardState[x][y]){
                 case CellType::apple:
                     painter.setBrush(appleColor);
                     painter.setPen(penApple);
-                    rect = QRect(xpos[j], ypos[i], QWidget::width()/w, QWidget::height()/h);
+                    rect = QRect(xpos[x], ypos[y], QWidget::width()/w, QWidget::height()/h);
                     painter.drawRect(rect);
                     break;
                 case CellType::snake:
                     painter.setBrush(snakeColor);
                     painter.setPen(penSnake);
-                    rect = QRect(xpos[j], ypos[i], QWidget::width()/w, QWidget::height()/h);
+                    rect = QRect(xpos[x], ypos[y], QWidget::width()/w, QWidget::height()/h);
                     painter.drawRect(rect);
                     break;
                 case CellType::empty:
@@ -86,6 +88,21 @@ void BoardWidget::paintEvent(QPaintEvent *e)
                 }
             }
         }
+    }
+    //Treat the end game:
+    if (this->isEnded){
+        QColor c = QColor("#7D505050");
+        QRect rect = QRect(0, 0, QWidget::width(), QWidget::height());
+        QPen penEndGame(c);
+        painter.setBrush(c);
+        painter.setPen(penEndGame);
+        painter.drawRect(rect);
+        // Text Game over
+        QPen penText(Qt::black);
+        painter.setPen(penText);
+        QRectF rect_text = QRectF(QWidget::width()*0.33, QWidget::height()*0.33,
+                           QWidget::width()*0.33, QWidget::height()*0.33);
+        painter.drawText(rect_text, Qt::AlignCenter, tr("Game Over"));
     }
 }
 
@@ -99,8 +116,31 @@ int BoardWidget::getBoardHeight() const
     return boardHeight;
 }
 
-void BoardWidget::setBoardCell(int i, int j, CellType value)
+QVector<QVector<CellType> > BoardWidget::getBoardState() const
 {
-    this->boardState[i][j] = value;
+    return boardState;
+}
+
+void BoardWidget::setBoardCell(int x, int y, CellType value)
+{
+    this->boardState[x][y] = value;
+    this->update();
+    qDebug() << "Board updated";
+}
+
+CellType BoardWidget::getBoardCell(int x, int y) const
+{
+    return this->boardState[x][y];
+}
+
+void BoardWidget::gameEnd()
+{
+    this->isEnded = true;
     this->update();
 }
+
+void BoardWidget::startGame(){
+    this->isEnded = false;
+    this->update();
+}
+

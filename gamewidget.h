@@ -24,6 +24,7 @@ signals:
     void toSelectActorWidget();
     void startGame();
     void stopGame();
+
 };
 
 #endif // GAMEWIDGET_H

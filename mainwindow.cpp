@@ -42,7 +42,37 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(gameLogic,
                      SIGNAL(setBoardCell(int, int, CellType)),
                      board, SLOT(setBoardCell(int, int, CellType)));
-    gameLogic->drawSnake();
+    gameLogic->drawSnakeInit();
+    //Signal to end the game
+    QObject::connect(gameLogic,
+                     SIGNAL(gameEnd()),
+                     gameLogic, SLOT(stopGame()));
+    QObject::connect(gameLogic,
+                     SIGNAL(gameEnd()),
+                     board, SLOT(gameEnd()));
+    QObject::connect(gameWidget,
+                     SIGNAL(stopGame()),
+                     board,
+                     SLOT(gameEnd()));
+    QObject::connect(gameWidget,
+                     SIGNAL(stopGame()),
+                     gameLogic,
+                     SLOT(stopGame()));
+    //Signal to start game
+    QObject::connect(gameWidget,
+                     SIGNAL(startGame()),
+                     board,
+                     SLOT(startGame()));
+    QObject::connect(gameWidget,
+                     SIGNAL(startGame()),
+                     gameLogic,
+                     SLOT(startGame()));
+    //Connect actor to game logic
+    QObject::connect(selectActorWidget,
+                     &SelectActorWidget::sendCurrentActor,
+                     gameLogic,
+                     &GameLogic::getNewActor);
+    selectActorWidget->setCurrentActor();
 }
 
 MainWindow::~MainWindow()

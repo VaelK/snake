@@ -1,1 +1,1 @@
-new_naive_actor
+new_naive_actor 10NaiveActor 

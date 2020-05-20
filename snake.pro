@@ -29,6 +29,7 @@ SOURCES += \
 
 HEADERS += \
     actor.h \
+    actortype.h \
     boardwidget.h \
     celltype.h \
     direction.h \

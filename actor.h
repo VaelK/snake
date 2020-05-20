@@ -9,17 +9,23 @@
 #include "QTextStream"
 #include <direction.h>
 #include <celltype.h>
+#include <QObject>
+#include <ActorType.h>
 
-class Actor
+class Actor : public QObject
 {
+    Q_OBJECT
+
 private:
+    Q_DISABLE_COPY(Actor)
     QHash<QString, double> params;
     QString name;
     QString pathToSave;
+    ActorType type;
+
 public:
     //Constructor
-    Actor(QString name = "new_actor");
-    Actor(QString name, QHash<QString, double> params);
+    Actor(QString name = "new_actor", QHash<QString, double> params = QHash<QString, double>());
 
     //Method
     //getter, setters
@@ -29,12 +35,20 @@ public:
     void setName(const QString &value);
     //Other methods
     virtual void train(){};
-    virtual Direction perform(Direction, QList<int>, QVector<QVector<CellType>>){return Direction::up;};
+    virtual Direction perform(Direction, QVector<QVector<int>>, QVector<QVector<CellType>>){return Direction::up;};
     static void saveActor(QString path, Actor &actor);
+    static Actor& loadActorFromFile(QString path);
     static void loadActor(QString path, Actor &actor);
 
     //Destructor
     virtual ~Actor();
+//public slots:
+//    void requireActorAction(Direction, QVector<QVector<int>>, QVector<QVector<CellType>>){};
+
+//signals:
+//    void actorActionResponse(Direction dir);
+    ActorType getType() const;
+    void setType(const ActorType &value);
 };
 
 #endif // ACTOR_H

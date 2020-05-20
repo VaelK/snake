@@ -24,7 +24,7 @@ SelectActorWidget::SelectActorWidget(QWidget *parent) :
                      this, SLOT(cancelNewActor()));
     this->parent = parent;
     this->pathToSave = "./data/actors/";
-    QList<Actor> listActor = this->loadActors();
+    QList<Actor*> listActor = this->loadActors();
     this->setCurrentActor(listActor[0]);
 }
 
@@ -36,7 +36,7 @@ SelectActorWidget::~SelectActorWidget()
 void SelectActorWidget::validateNewActor(){
     //TODO Add here logic that deal with updating (or not if no change) the current actor
     //Get the name of the selected actor from the list in the UI
-    Actor actor = Actor();
+    Actor *actor = new Actor();
     //Create the actor and set it as the current one
     this->setCurrentActor(actor);
     this->toGameWidget();
@@ -45,31 +45,35 @@ void SelectActorWidget::validateNewActor(){
 void SelectActorWidget::cancelNewActor(){
     this->toGameWidget();
 }
-QList<Actor> SelectActorWidget::loadActors()
+QList<Actor*> SelectActorWidget::loadActors()
 {
-    QList<Actor> listActor;
+    QList<Actor*> listActor;
     QDir dir(this->pathToSave, "*.txt");
     QStringList listFile = dir.entryList();
     for (int i = 0; i < listFile.size(); ++i)
     {
         qDebug() << "Reading file:";
         qDebug() << listFile.at(i);
-        Actor actor = Actor(listFile.at(i).left(listFile.at(i).length()-4));
-        Actor::loadActor(this->pathToSave, actor);
-        listActor.insert(listActor.begin(), actor);
+        Actor& actor = Actor::loadActorFromFile(this->pathToSave+listFile.at(i));
+        listActor.append(&actor);
 
     }
     // test if list is empty, then create a default actor here
     if (listActor.empty()){
-        NaiveActor actor= NaiveActor();
-        listActor.insert(listActor.begin(), actor);
-        Actor::saveActor(this->pathToSave, actor);
+        NaiveActor *actor= new NaiveActor();
+        listActor.append(actor);
+        Actor::saveActor(this->pathToSave, *actor);
     }
     return(listActor);
 }
 
-void SelectActorWidget::setCurrentActor(Actor actor){
-    this->currentActor = actor;
-    this->sendCurrentActor(actor);
+void SelectActorWidget::setCurrentActor(Actor *actor){
+    if (actor){
+        this->currentActor = actor;
+        this->sendCurrentActor(actor);
+        qDebug() << "The current actor has been set: "+actor->getName();
+    }else{
+        this->sendCurrentActor(this->currentActor);
+    }
 }
 
