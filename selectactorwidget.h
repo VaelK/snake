@@ -19,10 +19,12 @@ public:
     QWidget *parent;
     QList<Actor*> loadActors();
     void setCurrentActor(Actor *actor = NULL);
+    void refreshCBActor(ActorType);
 
 public slots:
     void validateNewActor();
     void cancelNewActor();
+    void addNewHumanActor();
 
 signals:
     void sendCurrentActor(Actor *actor);

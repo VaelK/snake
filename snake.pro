@@ -20,6 +20,7 @@ SOURCES += \
     boardwidget.cpp \
     gamelogic.cpp \
     gamewidget.cpp \
+    humanactor.cpp \
     main.cpp \
     mainwindow.cpp \
     naiveactor.cpp \
@@ -35,6 +36,7 @@ HEADERS += \
     direction.h \
     gamelogic.h \
     gamewidget.h \
+    humanactor.h \
     mainwindow.h \
     naiveactor.h \
     selectactorwidget.h \
