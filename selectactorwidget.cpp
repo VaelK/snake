@@ -11,6 +11,7 @@
 #include "actor.h"
 #include "naiveactor.h"
 #include "humanactor.h"
+#include "QComboBox"
 
 SelectActorWidget::SelectActorWidget(QWidget *parent) :
     QWidget(parent),
@@ -32,10 +33,15 @@ SelectActorWidget::SelectActorWidget(QWidget *parent) :
                      this, SLOT(addNewHumanActor()));
     ui->actorNameCB->clear();
     ui->actorTypeCB->clear();
-    ui->actorTypeCB->addItem("ia");
     ui->actorTypeCB->addItem("human");
+    ui->actorTypeCB->addItem("ia");
     ui->actorTypeCB->setCurrentText("ia");
     this->refreshCBActor(ActorType::ia);
+    //Callback for CB selection
+    QObject::connect(ui->actorTypeCB,
+                     QOverload<int>::of(&QComboBox::currentIndexChanged),
+                     this,
+                     QOverload<int>::of(&SelectActorWidget::ActorTypeChanged));
 }
 
 SelectActorWidget::~SelectActorWidget()
@@ -109,7 +115,6 @@ void SelectActorWidget::refreshCBActor(ActorType type){
     this->ui->actorNameCB->clear();
     for (int i=0; i<listActor.length(); i++){
         if (listActor[i]->getType() == type){
-            qDebug() << "Adding new actor to list";
             this->ui->actorNameCB->addItem(listActor[i]->getName());
         }
     }
@@ -136,3 +141,8 @@ void SelectActorWidget::addNewHumanActor(){
     this->refreshCBActor(ActorType::human);
 }
 
+void SelectActorWidget::ActorTypeChanged(int index){
+    qDebug() << "ActorTypeChanged";
+    qDebug() << index;
+    this->refreshCBActor(static_cast<ActorType>(index));
+}

@@ -59,6 +59,5 @@ Direction NaiveActor::perform(Direction currentDirection, QVector<QVector<int>> 
 }
 
 void NaiveActor::requireActorAction(Direction dir, QVector<QVector<int>> position, QVector<QVector<CellType>> boardState){
-    qDebug() << "Action required to naive actor";
     this->actorActionResponse(this->perform(dir, position, boardState));
 }

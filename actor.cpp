@@ -18,7 +18,6 @@ QTextStream& operator<<(QTextStream& out, const Actor& actor)
     out << actor.getName() << " ";
     out << typeid(actor).name() << " ";
     out << QString(static_cast<int>(actor.getType()));
-    qDebug() << "The actor written is of type "+QString(typeid(actor).name());
     if (actor.getParams().count() > 0){
         for(QHash<QString, double>::iterator iter=actor.getParams().begin(); iter!=actor.getParams().end(); iter++){
             out << iter.key() << " ";
@@ -96,9 +95,7 @@ void Actor::saveActor(QString pathToSave, Actor &actor){
     QFile file(fileName);
     file.open(file.ReadWrite);
     QTextStream out(&file);
-    qDebug() << actor.getName();
     out << actor;
-    qDebug() << "Wrting done";
     file.close();
 }
 
@@ -108,7 +105,6 @@ void Actor::loadActor(QString pathToSave, Actor &actor){
     file.open(file.ReadOnly);
     QTextStream in(&file);
     in >> actor;
-    qDebug() << "Reading done";
     file.close();
 }
 
@@ -124,7 +120,6 @@ Actor& Actor::loadActorFromFile(QString filePath){
     in >> actorName;
     in >> actorType;
     NaiveActor* test = new NaiveActor();
-    qDebug() << QString(typeid(*test).name());
     if (actorType.compare(QString(typeid(*test).name()))==0){
         NaiveActor* actor = new NaiveActor(fileName.left(fileName.length()-4));
         Actor::loadActor(fileDir, *actor);

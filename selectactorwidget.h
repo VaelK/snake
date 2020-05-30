@@ -25,6 +25,7 @@ public slots:
     void validateNewActor();
     void cancelNewActor();
     void addNewHumanActor();
+    void ActorTypeChanged(int index);
 
 signals:
     void sendCurrentActor(Actor *actor);

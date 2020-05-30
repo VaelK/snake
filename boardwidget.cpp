@@ -23,7 +23,6 @@ BoardWidget::~BoardWidget()
 
 void BoardWidget::paintEvent(QPaintEvent *e)
 {
-    qDebug() << "Paint event updating now...";
     // Coor parameters
     QColor appleColor = Qt::red;
     QColor snakeColor = Qt::black;
@@ -125,7 +124,6 @@ void BoardWidget::setBoardCell(int x, int y, CellType value)
 {
     this->boardState[x][y] = value;
     this->update();
-    qDebug() << "Board updated";
 }
 
 CellType BoardWidget::getBoardCell(int x, int y) const

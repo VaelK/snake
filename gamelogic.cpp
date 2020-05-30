@@ -39,7 +39,6 @@ void GameLogic::startGame(){
 
 void GameLogic::requireActorActionSlot(){
     //0. Actualise the currentDirection with actor
-    qDebug() << "requireActionSlot";
     this->requireActorAction(this->currentDirection, this->snakePosition, this->boardWidget->getBoardState());
 }
 
@@ -61,13 +60,9 @@ void GameLogic::drawSnakeInit(){
 }
 
 void GameLogic::actorActionResponse(Direction dir){
-    qDebug() << "Got a response from the actor"; 
     //0. Compute position of next grid point
     this->currentDirection = dir;
     QVector<int> currentHeadPosition = this->snakePosition[0];
-    qDebug() << "Old Head position";
-    qDebug() << currentHeadPosition[0];
-    qDebug() << currentHeadPosition[1];
     switch (dir) {
     case Direction::left:
         currentHeadPosition[0] -= 1;
@@ -89,9 +84,6 @@ void GameLogic::actorActionResponse(Direction dir){
         this->gameEnd();
         return;
     }
-    qDebug() << "New Head position";
-    qDebug() << currentHeadPosition[0];
-    qDebug() << currentHeadPosition[1];
     switch (this->boardWidget->getBoardCell(currentHeadPosition[0], currentHeadPosition[1]))
     {
     //1. check the next case.
@@ -117,9 +109,6 @@ void GameLogic::actorActionResponse(Direction dir){
 }
 
 void GameLogic::getNewActor(Actor *actor){
-    qDebug() << "Got new actor";
-    qDebug() << actor->getName();
-    qDebug() << typeid(actor).name();
     try {
         NaiveActor* naiveActor = dynamic_cast<NaiveActor*>(actor);
         QObject::connect(this,
