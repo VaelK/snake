@@ -92,7 +92,11 @@ void SelectActorWidget::setCurrentActor(Actor *actor){
 
 void SelectActorWidget::refreshCBActor(ActorType type){
     // Visibility of new acotr input
+    qDebug() << "refreshingCBActor";
+    qDebug() << static_cast<int>(ActorType::human);
+    qDebug() << static_cast<int>(type);
     if (type == ActorType::human){
+        qDebug() << "setting visible new human";
         this->ui->addActorLabel->setVisible(true);
         this->ui->nameNewActor->setVisible(true);
         this->ui->addNewActorButt->setVisible(true);
@@ -105,6 +109,7 @@ void SelectActorWidget::refreshCBActor(ActorType type){
     this->ui->actorNameCB->clear();
     for (int i=0; i<listActor.length(); i++){
         if (listActor[i]->getType() == type){
+            qDebug() << "Adding new actor to list";
             this->ui->actorNameCB->addItem(listActor[i]->getName());
         }
     }
