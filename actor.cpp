@@ -119,21 +119,19 @@ Actor& Actor::loadActorFromFile(QString filePath){
     NaiveActor* test = new NaiveActor();
     if (actorType.compare(QString(typeid(*test).name()))==0){
         NaiveActor* actor = new NaiveActor(fileName.left(fileName.length()-4));
-        qDebug() << "New naive actor created";
         Actor::loadActor(fileDir, *actor);
-        qDebug() << static_cast<int>(actor->getType());
         return *actor;
     }else{
         delete  test;
         Actor* test = new HumanActor();
-        if(actorType.compare(QString(typeid(test).name()))==0){
+        if(actorType.compare(QString(typeid(*test).name()))==0){
             HumanActor* actor = new HumanActor(fileName.left(fileName.length()-4));
             Actor::loadActor(fileDir, *actor);
             return *actor;
         }else{
             delete  test;
             Actor* test = new Actor();
-            if(actorType.compare(QString(typeid(test).name()))==0){
+            if(actorType.compare(QString(typeid(*test).name()))==0){
                 Actor* actor = new Actor(fileName);
                 Actor::loadActor(fileDir, *actor);
                 return *actor;
