@@ -12,12 +12,12 @@
 #include <QException>
 #include <naiveactor.h>
 #include <QVector>
+#include <humanactor.h>
 
 QTextStream& operator<<(QTextStream& out, const Actor& actor)
 {
     out << actor.getName() << " ";
     out << typeid(actor).name() << " ";
-    out << QString(static_cast<int>(actor.getType()));
     if (actor.getParams().count() > 0){
         for(QHash<QString, double>::iterator iter=actor.getParams().begin(); iter!=actor.getParams().end(); iter++){
             out << iter.key() << " ";
@@ -32,11 +32,8 @@ QTextStream &operator>>(QTextStream& in, Actor& actor)
     QString name;
     QHash<QString, double> params;
     QString classname;
-    QString type;
     in >> name;
     in >> classname;
-    in >> type;
-    actor.setType(static_cast<ActorType>(type.toInt()));
     if (classname != typeid(actor).name())
         throw QException{};
     while (!(in.atEnd())) {
@@ -122,17 +119,27 @@ Actor& Actor::loadActorFromFile(QString filePath){
     NaiveActor* test = new NaiveActor();
     if (actorType.compare(QString(typeid(*test).name()))==0){
         NaiveActor* actor = new NaiveActor(fileName.left(fileName.length()-4));
+        qDebug() << "New naive actor created";
         Actor::loadActor(fileDir, *actor);
+        qDebug() << static_cast<int>(actor->getType());
         return *actor;
     }else{
         delete  test;
-        Actor* test = new Actor();
+        Actor* test = new HumanActor();
         if(actorType.compare(QString(typeid(test).name()))==0){
-            Actor* actor = new Actor(fileName);
+            HumanActor* actor = new HumanActor(fileName.left(fileName.length()-4));
             Actor::loadActor(fileDir, *actor);
             return *actor;
         }else{
-            throw QException{};
+            delete  test;
+            Actor* test = new Actor();
+            if(actorType.compare(QString(typeid(test).name()))==0){
+                Actor* actor = new Actor(fileName);
+                Actor::loadActor(fileDir, *actor);
+                return *actor;
+            }else{
+                throw QException{};
+            }
         }
     }
 }

@@ -13,6 +13,7 @@ NaiveActor::NaiveActor(QString name)
 {
     //Initializing the random number generator for perform function
     srand(time(NULL));
+    this->setType(ActorType::ia);
 }
 
 NaiveActor::~NaiveActor(){}

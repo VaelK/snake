@@ -6,6 +6,7 @@
 HumanActor::HumanActor(QString name)
 : Actor{name}
 {
+    this->setType(ActorType::human);
 }
 
 HumanActor::~HumanActor(){}

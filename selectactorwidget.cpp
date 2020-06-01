@@ -73,7 +73,6 @@ QList<Actor*> SelectActorWidget::loadActors()
         qDebug() << listFile.at(i);
         Actor& actor = Actor::loadActorFromFile(this->pathToSave+listFile.at(i));
         listActor.append(&actor);
-
     }
     // test if list is empty, then create a default actor here
     if (listActor.empty()){
@@ -137,6 +136,8 @@ void SelectActorWidget::addNewHumanActor(){
     //Saving actor
     //Cleaning the input field
     this->ui->nameNewActor->setText("");
+    // Saving the actor name
+    Actor::saveActor("data/actors/", *actor);
     //Refreshing list
     this->refreshCBActor(ActorType::human);
 }
