@@ -69,8 +69,6 @@ QList<Actor*> SelectActorWidget::loadActors()
     QStringList listFile = dir.entryList();
     for (int i = 0; i < listFile.size(); ++i)
     {
-        qDebug() << "Reading file:";
-        qDebug() << listFile.at(i);
         Actor& actor = Actor::loadActorFromFile(this->pathToSave+listFile.at(i));
         listActor.append(&actor);
     }
@@ -84,24 +82,15 @@ QList<Actor*> SelectActorWidget::loadActors()
 }
 
 void SelectActorWidget::setCurrentActor(Actor *actor){
-    if (actor){
-        this->currentActor = actor;
-        this->sendCurrentActor(actor);
-        qDebug() << "The current actor has been set: "+actor->getName();
-    }else{
-        this->sendCurrentActor(this->currentActor);
-    }
+    this->currentActor = actor;
+    this->sendCurrentActor(actor);
 }
 
 // Logic of the combo boxs
 
 void SelectActorWidget::refreshCBActor(ActorType type){
     // Visibility of new acotr input
-    qDebug() << "refreshingCBActor";
-    qDebug() << static_cast<int>(ActorType::human);
-    qDebug() << static_cast<int>(type);
     if (type == ActorType::human){
-        qDebug() << "setting visible new human";
         this->ui->addActorLabel->setVisible(true);
         this->ui->nameNewActor->setVisible(true);
         this->ui->addNewActorButt->setVisible(true);
@@ -143,7 +132,5 @@ void SelectActorWidget::addNewHumanActor(){
 }
 
 void SelectActorWidget::ActorTypeChanged(int index){
-    qDebug() << "ActorTypeChanged";
-    qDebug() << index;
     this->refreshCBActor(static_cast<ActorType>(index));
 }

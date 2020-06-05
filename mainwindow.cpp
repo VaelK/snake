@@ -72,7 +72,6 @@ MainWindow::MainWindow(QWidget *parent)
                      &SelectActorWidget::sendCurrentActor,
                      gameLogic,
                      &GameLogic::getNewActor);
-    selectActorWidget->setCurrentActor();
 }
 
 MainWindow::~MainWindow()

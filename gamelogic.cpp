@@ -11,6 +11,7 @@
 #include <typeinfo>
 #include <naiveactor.h>
 #include <QException>
+#include <humanactor.h>
 
 GameLogic::GameLogic(BoardWidget *parent)
     : QObject(parent){
@@ -27,8 +28,8 @@ GameLogic::GameLogic(BoardWidget *parent)
 
 void GameLogic::initSnakePosition(){
     this->snakePosition = {{this->boardWidth/2, this->boardHeight/2},
-                          {this->boardWidth/2, this->boardHeight/2+1},
-                          {this->boardWidth/2, this->boardHeight/2+2}};
+                           {this->boardWidth/2, this->boardHeight/2+1},
+                           {this->boardWidth/2, this->boardHeight/2+2}};
 }
 
 void GameLogic::startGame(){
@@ -109,7 +110,10 @@ void GameLogic::actorActionResponse(Direction dir){
 }
 
 void GameLogic::getNewActor(Actor *actor){
-    try {
+    NaiveActor* test = new NaiveActor();
+    QString actorType = QString(typeid(*actor).name());
+    qDebug() << actor;
+    if (actorType.compare(QString(typeid(*test).name()))==0){
         NaiveActor* naiveActor = dynamic_cast<NaiveActor*>(actor);
         QObject::connect(this,
                          &GameLogic::requireActorAction,
@@ -119,7 +123,22 @@ void GameLogic::getNewActor(Actor *actor){
                          &NaiveActor::actorActionResponse,
                          this,
                          &GameLogic::actorActionResponse);
-    } catch (std::exception e) {
-        throw e;
+    }else{
+        delete  test;
+        Actor* test = new HumanActor();
+        if(actorType.compare(QString(typeid(*test).name()))==0){
+            HumanActor* humanActor = dynamic_cast<HumanActor*>(actor);
+            this->parent()->parent()->installEventFilter(humanActor);
+            QObject::connect(this,
+                             &GameLogic::requireActorAction,
+                             humanActor,
+                             &HumanActor::requireActorAction);
+            QObject::connect(humanActor,
+                             &HumanActor::actorActionResponse,
+                             this,
+                             &GameLogic::actorActionResponse);
+        }else{
+            throw QException{};
+        }
     }
 }
