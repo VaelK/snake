@@ -22,6 +22,8 @@ private:
     QString name;
     QString pathToSave;
     ActorType type;
+    int bestScore;
+    int currentScore;
 
 public:
     //Constructor
@@ -49,6 +51,9 @@ public:
 //    void actorActionResponse(Direction dir);
     ActorType getType() const;
     void setType(const ActorType &value);
+    void setBestScore(int value);
+    int getBestScore() const;
+    int getCurrentScore() const;
 };
 
 #endif // ACTOR_H

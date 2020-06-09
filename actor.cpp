@@ -79,10 +79,27 @@ void Actor::setType(const ActorType &value)
     type = value;
 }
 
+void Actor::setBestScore(int value)
+{
+    bestScore = value;
+}
+
+int Actor::getBestScore() const
+{
+    return bestScore;
+}
+
+int Actor::getCurrentScore() const
+{
+    return currentScore;
+}
+
 Actor::Actor(QString name, QHash<QString, double> params)
 {
     this->name = name;
     this->params = params;
+    this->bestScore = 0;
+    this->currentScore = 0;
 }
 
 Actor::~Actor(){}
@@ -94,6 +111,12 @@ void Actor::saveActor(QString pathToSave, Actor &actor){
     QTextStream out(&file);
     out << actor;
     file.close();
+    //Checking if a score file exists. If not creating one.
+    QString fileSaveName = "data/scores/"+actor.getName()+".txt";
+    QFile fileSave(fileName);
+    fileSave.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
+    QTextStream inScore(&fileSave);
+    inScore << actor.getBestScore();
 }
 
 void Actor::loadActor(QString pathToSave, Actor &actor){
@@ -103,6 +126,14 @@ void Actor::loadActor(QString pathToSave, Actor &actor){
     QTextStream in(&file);
     in >> actor;
     file.close();
+    //Getting the best score
+    QFile fileSave("data/scores/"+actor.getName()+".txt");
+    fileSave.open(fileSave.ReadOnly);
+    QTextStream inSave(&fileSave);
+    QString scoreStr = 0;
+    inSave >> scoreStr;
+    int score = scoreStr.toInt();
+    actor.setBestScore(score);
 }
 
 Actor& Actor::loadActorFromFile(QString filePath){
@@ -116,6 +147,7 @@ Actor& Actor::loadActorFromFile(QString filePath){
     QString actorType;
     in >> actorName;
     in >> actorType;
+    //building the actor
     NaiveActor* test = new NaiveActor();
     if (actorType.compare(QString(typeid(*test).name()))==0){
         NaiveActor* actor = new NaiveActor(fileName.left(fileName.length()-4));

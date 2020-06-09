@@ -27,3 +27,9 @@ GameWidget::~GameWidget()
 {
     delete ui;
 }
+
+void GameWidget::getNewActor(Actor *actor){
+    qDebug() << actor->getCurrentScore();
+    this->ui->scoreLabel->setText("Score: "+QString::number(actor->getCurrentScore()));
+    this->ui->actorLabel->setText("Acteur: "+actor->getName());
+}

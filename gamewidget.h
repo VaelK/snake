@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <celltype.h>
+#include <actor.h>
 
 namespace Ui {
 class GameWidget;
@@ -25,6 +26,8 @@ signals:
     void startGame();
     void stopGame();
 
+public slots:
+    void getNewActor(Actor *actor);
 };
 
 #endif // GAMEWIDGET_H

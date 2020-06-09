@@ -82,8 +82,13 @@ QList<Actor*> SelectActorWidget::loadActors()
 }
 
 void SelectActorWidget::setCurrentActor(Actor *actor){
-    this->currentActor = actor;
-    this->sendCurrentActor(actor);
+    if (actor){
+        delete this->currentActor;
+        this->currentActor = actor;
+        this->sendCurrentActor(actor);
+    }else{
+        this->sendCurrentActor(this->currentActor);
+    }
 }
 
 // Logic of the combo boxs

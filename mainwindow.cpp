@@ -72,6 +72,14 @@ MainWindow::MainWindow(QWidget *parent)
                      &SelectActorWidget::sendCurrentActor,
                      gameLogic,
                      &GameLogic::getNewActor);
+    //Connect new actor signal with gamewidget to update the informations
+    QObject::connect(selectActorWidget,
+                     &SelectActorWidget::sendCurrentActor,
+                     gameWidget,
+                     &GameWidget::getNewActor);
+
+    selectActorWidget->setCurrentActor();
+
 }
 
 MainWindow::~MainWindow()
