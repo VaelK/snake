@@ -16,11 +16,15 @@
 
 QTextStream& operator<<(QTextStream& out, const Actor& actor)
 {
+    qDebug() << "write";
     out << actor.getName() << " ";
     out << typeid(actor).name() << " ";
     if (actor.getParams().count() > 0){
+        qDebug() << actor.getParams();
         for(QHash<QString, double>::iterator iter=actor.getParams().begin(); iter!=actor.getParams().end(); iter++){
+            qDebug() << iter.key();
             out << iter.key() << " ";
+            qDebug() << QString::number(iter.value());
             out << QString::number(iter.value()) << " ";
         }
     }
@@ -29,11 +33,14 @@ QTextStream& operator<<(QTextStream& out, const Actor& actor)
 
 QTextStream &operator>>(QTextStream& in, Actor& actor)
 {
+    qDebug() << "read";
     QString name;
     QHash<QString, double> params;
     QString classname;
     in >> name;
     in >> classname;
+    qDebug() << name;
+    qDebug() << classname;
     if (classname != typeid(actor).name())
         throw QException{};
     while (!(in.atEnd())) {
@@ -41,6 +48,10 @@ QTextStream &operator>>(QTextStream& in, Actor& actor)
         QString val;
         in >> key;
         in >> val;
+        if ((key.length()==0) || (val.length()==0))
+            continue;
+        qDebug() << key;
+        qDebug() << val;
         bool ok = false;
         params.insert(key, val.toDouble(&ok));
     }
@@ -89,17 +100,11 @@ int Actor::getBestScore() const
     return bestScore;
 }
 
-int Actor::getCurrentScore() const
-{
-    return currentScore;
-}
-
 Actor::Actor(QString name, QHash<QString, double> params)
 {
     this->name = name;
     this->params = params;
     this->bestScore = 0;
-    this->currentScore = 0;
 }
 
 Actor::~Actor(){}
@@ -112,11 +117,13 @@ void Actor::saveActor(QString pathToSave, Actor &actor){
     out << actor;
     file.close();
     //Checking if a score file exists. If not creating one.
+    qDebug() << "Actor saved ";
     QString fileSaveName = "data/scores/"+actor.getName()+".txt";
-    QFile fileSave(fileName);
+    QFile fileSave(fileSaveName);
     fileSave.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
     QTextStream inScore(&fileSave);
     inScore << actor.getBestScore();
+    qDebug() << actor.getBestScore();
 }
 
 void Actor::loadActor(QString pathToSave, Actor &actor){
@@ -168,9 +175,14 @@ Actor& Actor::loadActorFromFile(QString filePath){
                 Actor::loadActor(fileDir, *actor);
                 return *actor;
             }else{
+                qDebug() << filePath;
+                qDebug() << "Actor has not been recognized...";
                 throw QException{};
             }
         }
     }
 }
 
+void Actor::stopGameSlot(){
+    this->saveActor("data/actors/", *this);
+}

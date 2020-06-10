@@ -21,6 +21,9 @@ GameWidget::GameWidget(QWidget *parent) :
     QObject::connect(ui->stopButt,
                      SIGNAL(pressed()),
                      this, SIGNAL(stopGame()));
+    QObject::connect(ui->stopButt,
+                     SIGNAL(pressed()),
+                     this, SLOT(stopGameSlot()));
 }
 
 GameWidget::~GameWidget()
@@ -29,7 +32,20 @@ GameWidget::~GameWidget()
 }
 
 void GameWidget::getNewActor(Actor *actor){
-    qDebug() << actor->getCurrentScore();
-    this->ui->scoreLabel->setText("Score: "+QString::number(actor->getCurrentScore()));
+    this->ui->scoreLabel->setText("Score: 0");
     this->ui->actorLabel->setText("Acteur: "+actor->getName());
+    QObject::connect(ui->stopButt,
+                     SIGNAL(pressed()),
+                     actor, SLOT(stopGameSlot()));
+}
+
+void GameWidget::increaseScore(){
+    int score = QString(ui->scoreLabel->text().split(" ")[1]).toInt();
+    score += 1;
+    this->ui->scoreLabel->setText("Score: "+QString::number(score));
+    this->increaseBestScore(score);
+}
+
+void GameWidget::stopGameSlot(){
+    this->ui->scoreLabel->setText("Score: 0");
 }

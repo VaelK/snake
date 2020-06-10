@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent)
                      SIGNAL(setBoardCell(int, int, CellType)),
                      board, SLOT(setBoardCell(int, int, CellType)));
     gameLogic->drawSnakeInit();
+    gameLogic->createApple();
     //Signal to end the game
     QObject::connect(gameLogic,
                      SIGNAL(gameEnd()),
@@ -77,7 +78,19 @@ MainWindow::MainWindow(QWidget *parent)
                      &SelectActorWidget::sendCurrentActor,
                      gameWidget,
                      &GameWidget::getNewActor);
-
+    //Keep track of the score
+    QObject::connect(gameLogic,
+                     &GameLogic::increaseScore,
+                     gameWidget,
+                     &GameWidget::increaseScore);
+    QObject::connect(gameLogic,
+                     &GameLogic::gameEnd,
+                     gameWidget,
+                     &GameWidget::stopGameSlot);
+    QObject::connect(gameWidget,
+                     &GameWidget::increaseBestScore,
+                     selectActorWidget,
+                     &SelectActorWidget::increaseBestScore);
     selectActorWidget->setCurrentActor();
 
 }

@@ -23,7 +23,6 @@ private:
     QString pathToSave;
     ActorType type;
     int bestScore;
-    int currentScore;
 
 public:
     //Constructor
@@ -44,16 +43,16 @@ public:
 
     //Destructor
     virtual ~Actor();
-//public slots:
-//    void requireActorAction(Direction, QVector<QVector<int>>, QVector<QVector<CellType>>){};
+public slots:
+    void stopGameSlot();
 
 //signals:
 //    void actorActionResponse(Direction dir);
+
     ActorType getType() const;
     void setType(const ActorType &value);
     void setBestScore(int value);
     int getBestScore() const;
-    int getCurrentScore() const;
 };
 
 #endif // ACTOR_H

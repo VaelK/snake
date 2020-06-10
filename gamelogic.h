@@ -25,6 +25,8 @@ public:
     virtual ~GameLogic() {}
     void drawSnakeInit();
     void initSnakePosition();
+    void createApple();
+
 signals:
     void setBoardCell(int i, int j, CellType c);
     void requireActorAction(Direction, QVector<QVector<int>>, QVector<QVector<CellType>>);

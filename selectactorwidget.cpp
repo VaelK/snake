@@ -41,7 +41,7 @@ SelectActorWidget::SelectActorWidget(QWidget *parent) :
     QObject::connect(ui->actorTypeCB,
                      QOverload<int>::of(&QComboBox::currentIndexChanged),
                      this,
-                     QOverload<int>::of(&SelectActorWidget::ActorTypeChanged));
+                     QOverload<int>::of(&SelectActorWidget::actorTypeChanged));
 }
 
 SelectActorWidget::~SelectActorWidget()
@@ -136,6 +136,11 @@ void SelectActorWidget::addNewHumanActor(){
     this->refreshCBActor(ActorType::human);
 }
 
-void SelectActorWidget::ActorTypeChanged(int index){
+void SelectActorWidget::actorTypeChanged(int index){
     this->refreshCBActor(static_cast<ActorType>(index));
+}
+
+void SelectActorWidget::increaseBestScore(int score){
+    if (this->currentActor->getBestScore() < score)
+        this->currentActor->setBestScore(score);
 }

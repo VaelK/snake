@@ -18,7 +18,8 @@ public:
     int getBoardWidth() const;
     int getBoardHeight() const;
     CellType getBoardCell(int i, int j) const;
-    QVector<QVector<CellType> > getBoardState() const;
+    QVector<QVector<CellType>> getBoardState() const;
+    QVector<QVector<int>> getEmptyCells();
 
 private:
     Ui::BoardWidget *ui;

@@ -17,7 +17,7 @@ GameLogic::GameLogic(BoardWidget *parent)
     : QObject(parent){
     this->boardWidth = parent->getBoardWidth();
     this->boardHeight = parent->getBoardHeight();
-    this->actionPerMinutes = 120;
+    this->actionPerMinutes = 600;
     this->initSnakePosition();
     this->currentDirection = Direction::up;
     this->boardWidget = parent;
@@ -81,7 +81,7 @@ void GameLogic::actorActionResponse(Direction dir){
         throw QException{};
     }
     //Check border:
-    if ((currentHeadPosition[0] < 0)||(currentHeadPosition[1] < 0)){
+    if ((currentHeadPosition[0] < 0)||(currentHeadPosition[1] < 0) || (currentHeadPosition[0] >= this->boardWidth) || (currentHeadPosition[1] >= this->boardHeight)){
         this->gameEnd();
         return;
     }
@@ -97,6 +97,7 @@ void GameLogic::actorActionResponse(Direction dir){
         this->snakePosition.prepend(currentHeadPosition);
         this->setBoardCell(currentHeadPosition[0], currentHeadPosition[1], CellType::snake);
         this->increaseScore();
+        this->createApple();
         break;
     case CellType::empty:
         //   If empty => push the grid point to snakePosition and pop its rear position
@@ -110,9 +111,12 @@ void GameLogic::actorActionResponse(Direction dir){
 }
 
 void GameLogic::getNewActor(Actor *actor){
+    QObject::connect(this,
+                     &GameLogic::gameEnd,
+                     actor,
+                     &Actor::stopGameSlot);
     NaiveActor* test = new NaiveActor();
     QString actorType = QString(typeid(*actor).name());
-    qDebug() << actor;
     if (actorType.compare(QString(typeid(*test).name()))==0){
         NaiveActor* naiveActor = dynamic_cast<NaiveActor*>(actor);
         QObject::connect(this,
@@ -141,4 +145,11 @@ void GameLogic::getNewActor(Actor *actor){
             throw QException{};
         }
     }
+}
+
+void GameLogic::createApple(){
+    QVector<QVector<int>> emptyCells = this->boardWidget->getEmptyCells();
+    srand(time(NULL));
+    int pos = rand() % emptyCells.length();
+    this->boardWidget->setBoardCell(emptyCells[pos][0], emptyCells[pos][1], CellType::apple);
 }

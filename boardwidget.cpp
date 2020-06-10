@@ -142,3 +142,17 @@ void BoardWidget::startGame(){
     this->update();
 }
 
+QVector<QVector<int>> BoardWidget::getEmptyCells(){
+    QVector<QVector<int>> result;
+    for (int x=0; x<this->boardState.length(); ++x){
+        for (int y=0; y<this->boardState[x].length(); ++y){
+            if (this->getBoardCell(x, y) == CellType::empty){
+                QVector<int> pos = QVector<int>(2);
+                pos[0] = x;
+                pos[1] = y;
+                result.append(pos);
+            }
+        }
+    }
+    return result;
+}

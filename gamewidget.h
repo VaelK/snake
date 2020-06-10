@@ -25,9 +25,12 @@ signals:
     void toSelectActorWidget();
     void startGame();
     void stopGame();
+    void increaseBestScore(int);
 
 public slots:
     void getNewActor(Actor *actor);
+    void increaseScore();
+    void stopGameSlot();
 };
 
 #endif // GAMEWIDGET_H
