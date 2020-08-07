@@ -8,6 +8,7 @@
 #include "gamelogic.h"
 #include "celltype.h"
 #include "QDebug"
+#include "cpuactor.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -34,6 +35,9 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(gameWidget,
                      SIGNAL(toStatsWidget()),
                      this, SLOT(toStatsWidget()));
+    QObject::connect(gameWidget,
+                     SIGNAL(toStatsWidget()),
+                     statWidget, SLOT(toStatsWidget()));
     QObject::connect(gameWidget,
                      SIGNAL(toSelectActorWidget()),
                      this, SLOT(toSelectActorWidget()));
@@ -92,7 +96,18 @@ MainWindow::MainWindow(QWidget *parent)
                      selectActorWidget,
                      &SelectActorWidget::increaseBestScore);
     selectActorWidget->setCurrentActor();
-
+    //Managing actor list calls
+    QObject::connect(statWidget,
+                     &StatWidget::requestActorList,
+                     selectActorWidget,
+                     &SelectActorWidget::requestActorList);
+    QObject::connect(selectActorWidget,
+                     &SelectActorWidget::sendActorList,
+                     statWidget,
+                     &StatWidget::getActorList);
+    CpuActor *cpu = new CpuActor();
+    //To create new actor
+    //cpu->saveActor("data/actors/", *cpu);
 }
 
 MainWindow::~MainWindow()

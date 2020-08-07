@@ -13,18 +13,15 @@
 #include <naiveactor.h>
 #include <QVector>
 #include <humanactor.h>
+#include <cpuactor.h>
 
 QTextStream& operator<<(QTextStream& out, const Actor& actor)
 {
-    qDebug() << "write";
     out << actor.getName() << " ";
     out << typeid(actor).name() << " ";
     if (actor.getParams().count() > 0){
-        qDebug() << actor.getParams();
         for(QHash<QString, double>::iterator iter=actor.getParams().begin(); iter!=actor.getParams().end(); iter++){
-            qDebug() << iter.key();
             out << iter.key() << " ";
-            qDebug() << QString::number(iter.value());
             out << QString::number(iter.value()) << " ";
         }
     }
@@ -33,14 +30,11 @@ QTextStream& operator<<(QTextStream& out, const Actor& actor)
 
 QTextStream &operator>>(QTextStream& in, Actor& actor)
 {
-    qDebug() << "read";
     QString name;
     QHash<QString, double> params;
     QString classname;
     in >> name;
     in >> classname;
-    qDebug() << name;
-    qDebug() << classname;
     if (classname != typeid(actor).name())
         throw QException{};
     while (!(in.atEnd())) {
@@ -50,8 +44,6 @@ QTextStream &operator>>(QTextStream& in, Actor& actor)
         in >> val;
         if ((key.length()==0) || (val.length()==0))
             continue;
-        qDebug() << key;
-        qDebug() << val;
         bool ok = false;
         params.insert(key, val.toDouble(&ok));
     }
@@ -100,30 +92,43 @@ int Actor::getBestScore() const
     return bestScore;
 }
 
+int Actor::getTotalNumAction() const
+{
+    return totalNumAction;
+}
+
+void Actor::setTotalNumAction(int value)
+{
+    totalNumAction = value;
+}
+
 Actor::Actor(QString name, QHash<QString, double> params)
 {
     this->name = name;
     this->params = params;
     this->bestScore = 0;
+    this->totalNumAction = 0;
 }
 
 Actor::~Actor(){}
 
 void Actor::saveActor(QString pathToSave, Actor &actor){
-    QString fileName = pathToSave+actor.getName()+".txt";
-    QFile file(fileName);
+    //Loading actor
+    QFile file(pathToSave+actor.getName()+".txt");
     file.open(file.ReadWrite);
     QTextStream out(&file);
     out << actor;
     file.close();
-    //Checking if a score file exists. If not creating one.
-    qDebug() << "Actor saved ";
-    QString fileSaveName = "data/scores/"+actor.getName()+".txt";
-    QFile fileSave(fileSaveName);
+    //Loading score.
+    QFile fileSave("data/scores/"+actor.getName()+".txt");
     fileSave.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
     QTextStream inScore(&fileSave);
     inScore << actor.getBestScore();
-    qDebug() << actor.getBestScore();
+    //Loading total number of actions.
+    QFile fileActNum("data/numberActions/"+actor.getName()+".txt");
+    fileActNum.open(QIODevice::ReadWrite | QIODevice::Truncate | QIODevice::Text);
+    QTextStream inActNum(&fileActNum);
+    inActNum << actor.getTotalNumAction();
 }
 
 void Actor::loadActor(QString pathToSave, Actor &actor){
@@ -137,10 +142,18 @@ void Actor::loadActor(QString pathToSave, Actor &actor){
     QFile fileSave("data/scores/"+actor.getName()+".txt");
     fileSave.open(fileSave.ReadOnly);
     QTextStream inSave(&fileSave);
-    QString scoreStr = 0;
+    QString scoreStr;
     inSave >> scoreStr;
     int score = scoreStr.toInt();
     actor.setBestScore(score);
+    //Getting the total number of actions
+    QFile fileActNum("data/numberActions/"+actor.getName()+".txt");
+    fileActNum.open(fileActNum.ReadOnly);
+    QTextStream inActNum(&fileActNum);
+    QString actNum;
+    inActNum >> actNum;
+    int actNumInt = actNum.toInt();
+    actor.totalNumAction = actNumInt;
 }
 
 Actor& Actor::loadActorFromFile(QString filePath){
@@ -169,15 +182,23 @@ Actor& Actor::loadActorFromFile(QString filePath){
             return *actor;
         }else{
             delete  test;
-            Actor* test = new Actor();
+            Actor* test = new CpuActor();
             if(actorType.compare(QString(typeid(*test).name()))==0){
-                Actor* actor = new Actor(fileName);
+                CpuActor* actor = new CpuActor(fileName.left(fileName.length()-4));
                 Actor::loadActor(fileDir, *actor);
                 return *actor;
             }else{
-                qDebug() << filePath;
-                qDebug() << "Actor has not been recognized...";
-                throw QException{};
+                delete  test;
+                Actor* test = new Actor();
+                if(actorType.compare(QString(typeid(*test).name()))==0){
+                    Actor* actor = new Actor(fileName);
+                    Actor::loadActor(fileDir, *actor);
+                    return *actor;
+                }else{
+                    qDebug() << filePath;
+                    qDebug() << "Actor has not been recognized...";
+                    throw QException{};
+                }
             }
         }
     }

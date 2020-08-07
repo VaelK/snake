@@ -4,6 +4,7 @@
 #include "QPainter"
 #include "QDebug"
 #include "QtMath"
+#include "QBrushData"
 
 BoardWidget::BoardWidget(QWidget *parent) :
     QWidget(parent),
@@ -14,6 +15,33 @@ BoardWidget::BoardWidget(QWidget *parent) :
     this->boardHeight = 30;
     this->boardState = QVector<QVector<CellType>>(this->boardWidth, QVector<CellType>(this->boardHeight)); // convention x, y. x = abscisse, y = ordonne
     this->isEnded = false;
+    int rockWidth = 4;
+    int rockHeight = 6;
+    int nbRockRow = 3;
+    int nbRockCol = 5;
+    QVector<int> rockColSpace = QVector<int>(nbRockCol, 4);
+    rockColSpace[0] = 2;
+    for (int i=1; i< rockColSpace.length(); i++){
+        rockColSpace[i] = rockColSpace[i-1] + rockColSpace[i];
+    }
+    QVector<int> rockRowSpace = QVector<int>(nbRockRow, 3);
+    for (int i=1; i< rockRowSpace.length(); i++){
+        rockRowSpace[i] = rockRowSpace[i-1] + rockRowSpace[i];
+    }
+    qDebug() << "test";
+    for (int rockRow=0; rockRow<nbRockRow; rockRow++){
+        for (int rockCol=0; rockCol<nbRockCol; rockCol++){
+            int leftPos = rockColSpace[rockCol]+(rockCol)*rockWidth;
+            int topPos = rockRowSpace[rockRow]+(rockRow)*rockHeight;
+            qDebug() << "Left pos:"+QString::number(leftPos);
+            qDebug() << "Top pos:"+QString::number(topPos);
+            for (int rockX=0; rockX<rockWidth; rockX++){
+                for (int rockY=0; rockY<rockHeight; rockY++){
+                    this->boardState[leftPos+rockX][topPos+rockY] = CellType::rock;
+                }
+            }
+        }
+    }
 }
 
 BoardWidget::~BoardWidget()
@@ -27,6 +55,7 @@ void BoardWidget::paintEvent(QPaintEvent *e)
     QColor appleColor = Qt::red;
     QColor snakeColor = Qt::black;
     QColor gridColor = Qt::gray;
+    QColor rockColor = Qt::black;
     // Draw the mesh
     QPainter painter(this);
     QPen pen(gridColor);
@@ -65,6 +94,9 @@ void BoardWidget::paintEvent(QPaintEvent *e)
         QPen penApple(appleColor);
         QPen penSnake(snakeColor);
         QPen penGrid(gridColor);
+        QBrush brushRock(Qt::BDiagPattern);
+        QPen penRock(rockColor);
+        brushRock.setColor(rockColor);
         penApple.setWidth(1);
         QRect rect;
         for (int x=0; x<this->boardState.length(); ++x){
@@ -79,6 +111,12 @@ void BoardWidget::paintEvent(QPaintEvent *e)
                 case CellType::snake:
                     painter.setBrush(snakeColor);
                     painter.setPen(penSnake);
+                    rect = QRect(xpos[x], ypos[y], QWidget::width()/w, QWidget::height()/h);
+                    painter.drawRect(rect);
+                    break;
+                case CellType::rock:
+                    painter.setBrush(brushRock);
+                    painter.setPen(penRock);
                     rect = QRect(xpos[x], ypos[y], QWidget::width()/w, QWidget::height()/h);
                     painter.drawRect(rect);
                     break;

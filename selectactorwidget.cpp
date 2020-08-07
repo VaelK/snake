@@ -144,3 +144,7 @@ void SelectActorWidget::increaseBestScore(int score){
     if (this->currentActor->getBestScore() < score)
         this->currentActor->setBestScore(score);
 }
+
+void SelectActorWidget::requestActorList(){
+    this->sendActorList(this->loadActors());
+}

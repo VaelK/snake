@@ -10,6 +10,9 @@ public:
     void train();
     Direction perform(Direction currentDirection, QVector<QVector<int>> position, QVector<QVector<CellType>> boardState);
     ~HumanActor();
+    void setCurrentDirection(const Direction &value);
+    bool gameIsOn;
+
 private:
     Direction currentDirection;
 
@@ -22,6 +25,8 @@ signals:
 
 public slots:
     void requireActorAction(Direction, QVector<QVector<int>>, QVector<QVector<CellType>>);
+    void stopGameSlot();
+    void startGameSlot();
 };
 
 #endif // HUMANACTOR_H

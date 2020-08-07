@@ -32,6 +32,8 @@ signals:
     void requireActorAction(Direction, QVector<QVector<int>>, QVector<QVector<CellType>>);
     void gameEnd();
     void increaseScore();
+    void startGameSig();
+
 public slots:
     void requireActorActionSlot();
     void startGame();

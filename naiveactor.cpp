@@ -61,4 +61,5 @@ Direction NaiveActor::perform(Direction currentDirection, QVector<QVector<int>> 
 
 void NaiveActor::requireActorAction(Direction dir, QVector<QVector<int>> position, QVector<QVector<CellType>> boardState){
     this->actorActionResponse(this->perform(dir, position, boardState));
+    this->setTotalNumAction(this->getTotalNumAction()+1);
 }

@@ -27,10 +27,12 @@ public slots:
     void addNewHumanActor();
     void actorTypeChanged(int index);
     void increaseBestScore(int);
+    void requestActorList();
 
 signals:
     void sendCurrentActor(Actor *actor);
     void toGameWidget();
+    void sendActorList(QList<Actor*>);
 
 private:
     Ui::SelectActorWidget *ui;

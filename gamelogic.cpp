@@ -12,6 +12,7 @@
 #include <naiveactor.h>
 #include <QException>
 #include <humanactor.h>
+#include <cpuactor.h>
 
 GameLogic::GameLogic(BoardWidget *parent)
     : QObject(parent){
@@ -27,12 +28,15 @@ GameLogic::GameLogic(BoardWidget *parent)
 }
 
 void GameLogic::initSnakePosition(){
-    this->snakePosition = {{this->boardWidth/2, this->boardHeight/2},
-                           {this->boardWidth/2, this->boardHeight/2+1},
-                           {this->boardWidth/2, this->boardHeight/2+2}};
+    this->snakePosition = {{this->boardWidth/2-4, this->boardHeight/2},
+                           {this->boardWidth/2-4, this->boardHeight/2+1},
+                           {this->boardWidth/2-4, this->boardHeight/2+2}};
 }
 
 void GameLogic::startGame(){
+    qDebug() << "Game started";
+    this->currentDirection = Direction::up;
+    this->startGameSig();
     this->isStarted = true;
     //Set timer to process motion every x ms
     this->timer->start(60.0/this->actionPerMinutes*1000);
@@ -52,6 +56,7 @@ void GameLogic::stopGame(){
     }
     this->initSnakePosition();
     this->drawSnakeInit();
+    this->currentDirection = Direction::up;
 }
 
 void GameLogic::drawSnakeInit(){
@@ -83,6 +88,7 @@ void GameLogic::actorActionResponse(Direction dir){
     //Check border:
     if ((currentHeadPosition[0] < 0)||(currentHeadPosition[1] < 0) || (currentHeadPosition[0] >= this->boardWidth) || (currentHeadPosition[1] >= this->boardHeight)){
         this->gameEnd();
+        qDebug() << "Border reached";
         return;
     }
     switch (this->boardWidget->getBoardCell(currentHeadPosition[0], currentHeadPosition[1]))
@@ -91,6 +97,7 @@ void GameLogic::actorActionResponse(Direction dir){
     case CellType::snake:
         //   If snake => game ends (function game ends with saving scores and so on)
         this->gameEnd();
+        qDebug() << "Found snake";
         break;
     case CellType::apple:
         //   If apple => insert the grid point to snakePosition (index 0), send signal to update score
@@ -111,10 +118,13 @@ void GameLogic::actorActionResponse(Direction dir){
 }
 
 void GameLogic::getNewActor(Actor *actor){
+    //To reset the direction to up after games stop
+    // and to save the actor
     QObject::connect(this,
                      &GameLogic::gameEnd,
                      actor,
                      &Actor::stopGameSlot);
+
     NaiveActor* test = new NaiveActor();
     QString actorType = QString(typeid(*actor).name());
     if (actorType.compare(QString(typeid(*test).name()))==0){
@@ -141,14 +151,50 @@ void GameLogic::getNewActor(Actor *actor){
                              &HumanActor::actorActionResponse,
                              this,
                              &GameLogic::actorActionResponse);
+            //extra function for human actor when game stops
+            QObject::connect(this,
+                             &GameLogic::gameEnd,
+                             humanActor,
+                             &HumanActor::stopGameSlot);
+            QObject::connect(this,
+                             &GameLogic::startGameSig,
+                             humanActor,
+                             &HumanActor::startGameSlot);
         }else{
-            throw QException{};
+            delete  test;
+            Actor* test = new CpuActor();
+            if(actorType.compare(QString(typeid(*test).name()))==0){
+                CpuActor* cpuActor = dynamic_cast<CpuActor*>(actor);
+                this->parent()->parent()->installEventFilter(cpuActor);
+                QObject::connect(this,
+                                 &GameLogic::requireActorAction,
+                                 cpuActor,
+                                 &CpuActor::requireActorAction);
+                QObject::connect(cpuActor,
+                                 &CpuActor::actorActionResponse,
+                                 this,
+                                 &GameLogic::actorActionResponse);
+                //extra function for human actor when game stops
+                QObject::connect(this,
+                                 &GameLogic::gameEnd,
+                                 cpuActor,
+                                 &CpuActor::stopGameSlot);
+            }else{
+                throw QException{};
+            }
         }
     }
 }
 
 void GameLogic::createApple(){
+
     QVector<QVector<int>> emptyCells = this->boardWidget->getEmptyCells();
+    int size = emptyCells.length();
+    for (int i = 0; i < (size * 20); i++) {
+        int randvalue1 = (rand() % size) + 0;
+        int randvalue2 = (rand() % size) + 0;
+        emptyCells.swapItemsAt(randvalue1, randvalue2);
+    }
     srand(time(NULL));
     int pos = rand() % emptyCells.length();
     this->boardWidget->setBoardCell(emptyCells[pos][0], emptyCells[pos][1], CellType::apple);

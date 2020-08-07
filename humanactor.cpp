@@ -10,9 +10,15 @@ HumanActor::HumanActor(QString name)
 {
     this->setType(ActorType::human);
     this->currentDirection = Direction::up;
+    this->gameIsOn = false;
 }
 
 HumanActor::~HumanActor(){}
+
+void HumanActor::setCurrentDirection(const Direction &value)
+{
+    currentDirection = value;
+}
 
 void HumanActor::train(){
 
@@ -40,6 +46,7 @@ void HumanActor::requireActorAction(Direction dir, QVector<QVector<int>> positio
         this->currentDirection = Direction::right;
     }
     this->actorActionResponse(this->perform(this->currentDirection, position, boardState));
+    this->setTotalNumAction(this->getTotalNumAction()+1);
 }
 
 bool HumanActor::keyReleaseEvent(QKeyEvent *ev)
@@ -69,10 +76,26 @@ bool HumanActor::keyReleaseEvent(QKeyEvent *ev)
 bool HumanActor::eventFilter(QObject* obj, QEvent* event)
 {
     if (event->type()==QEvent::KeyRelease) {
-        QKeyEvent* key = static_cast<QKeyEvent*>(event);
-        return this->keyReleaseEvent(key);
+        if (this->gameIsOn == false){
+            return QObject::eventFilter(obj, event);
+        }else{
+            QKeyEvent* key = static_cast<QKeyEvent*>(event);
+            return this->keyReleaseEvent(key);
+        }
     } else {
         return QObject::eventFilter(obj, event);
     }
     return false;
+}
+
+void HumanActor::stopGameSlot(){
+    this->gameIsOn = false;
+//    this->saveActor("data/actors/", *this);
+    this->setCurrentDirection(Direction::up);
+
+}
+
+void HumanActor::startGameSlot(){
+    this->setCurrentDirection(Direction::up);
+    this->gameIsOn = true;    
 }

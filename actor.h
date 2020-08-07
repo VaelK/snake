@@ -23,6 +23,7 @@ private:
     QString pathToSave;
     ActorType type;
     int bestScore;
+    int totalNumAction;
 
 public:
     //Constructor
@@ -34,6 +35,10 @@ public:
     void setParams(const QHash<QString, double> &value);
     QString getName() const;
     void setName(const QString &value);
+    ActorType getType() const;
+    void setType(const ActorType &value);
+    void setBestScore(int value);
+    int getBestScore() const;
     //Other methods
     virtual void train(){};
     virtual Direction perform(Direction, QVector<QVector<int>>, QVector<QVector<CellType>>){return Direction::up;};
@@ -43,16 +48,18 @@ public:
 
     //Destructor
     virtual ~Actor();
+
+    int getTotalNumAction() const;
+
+    void setTotalNumAction(int value);
+
 public slots:
     void stopGameSlot();
 
-//signals:
-//    void actorActionResponse(Direction dir);
+signals:
+    void actorActionResponse(Direction dir);
 
-    ActorType getType() const;
-    void setType(const ActorType &value);
-    void setBestScore(int value);
-    int getBestScore() const;
+
 };
 
 #endif // ACTOR_H

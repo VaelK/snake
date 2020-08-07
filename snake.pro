@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     actor.cpp \
     boardwidget.cpp \
+    cpuactor.cpp \
     gamelogic.cpp \
     gamewidget.cpp \
     humanactor.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     actortype.h \
     boardwidget.h \
     celltype.h \
+    cpuactor.h \
     direction.h \
     gamelogic.h \
     gamewidget.h \
@@ -57,3 +59,5 @@ TRANSLATIONS += \
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+QT += charts
